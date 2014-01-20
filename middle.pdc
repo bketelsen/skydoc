@@ -22,6 +22,10 @@ The development of SkyDNS takes place on Github ([](#SkyDNS-git)).
 
 ## Naming
 
+Service names are registred by a submitting an HTTP query (with JSON data) to SkyDNS, 
+see [](#service-registration)
+for more details. Querying SkyDNS can be done either via HTTP or via the DNS (see
+[](#service-discovery)).
 SkyDNS divides the name for a service in different components, as follows:
 
 Name:
@@ -42,12 +46,8 @@ Host:
 
 A service name will use these components in a fixed order:
 
-    <Host>.<Version>.<Region>.<Name>.<Environment>
+    <Host> <Version> <Region> <Name> <Environment>
     
-Service names are registred by a submitting an HTTP query (with JSON data) to SkyDNS, 
-see [](#service-registration)
-for more details. Querying SkyDNS can be done either via HTTP or via the DNS (see
-[](#service-discovery)).
 
 
 # Service Registration
