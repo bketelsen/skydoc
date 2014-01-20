@@ -77,7 +77,7 @@ Ketelsen, et al.          Expires July 24, 2014                 [Page 1]
 
    Service names are registred by a submitting an HTTP query (with JSON
    data) to SkyDNS, see Section 3 for more details.  Querying SkyDNS can
-   be done either via HTTP or via the DNS (see Section 4)
+   be done either via HTTP or via the DNS (see Section 4).
 
 3.  Service Registration
 
