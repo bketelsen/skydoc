@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<!DOCTYPE rfc SYSTEM 'rfc2629.dtd' [
+<!ENTITY pandocAbstract PUBLIC '' 'abstract.xml'>
+<!ENTITY pandocMiddle   PUBLIC '' 'middle.xml'>
+<!ENTITY pandocBack     PUBLIC '' 'back.xml'>
+
+<!-- <!ENTITY rfc5731        PUBLIC '' 'bib/reference.RFC.5731.xml'> -->
+]>
+
+<rfc ipr="trust200902" category="std" docName="draft-gieben-epp-keyrelay-03">
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<?rfc private="yes"?>
+<?rfc topblock="no"?>
+ <front>
+        <title abbrev="SkyDNS">SkyDNS: Distributed Service Discovery</title>
+        <author initials="B." surname="Ketelsen" fullname="Brian Ketelsen">
+            <address>
+                <phone></phone>
+                <email>x@x.com</email>
+                <uri></uri>
+            </address>
+        </author>
+        <author initials="E." surname="Martin" fullname="Erik St. Martin">
+            <address>
+                <phone></phone>
+                <email>x@x.com</email>
+                <uri></uri>
+            </address>
+        </author>
+        <author initials="R." surname="Gieben" fullname="R. (Miek) Gieben">
+            <address>
+                <phone></phone>
+                <email>miek@miek.nl</email>
+                <uri>http://miek.nl</uri>
+            </address>
+        </author>
+
+        <date/>
+        <area>Internet</area>
+        <workgroup></workgroup>
+        <keyword>SkyDNS</keyword>
+        <keyword>Service</keyword>
+        <keyword>Discovery</keyword>
+        <keyword>HTTP</keyword>
+        <keyword>DNS</keyword>
+        <keyword>Golang</keyword>
+        <abstract>
+            &pandocAbstract;
+        </abstract>
+</front>
+
+<middle>
+&pandocMiddle;
+</middle>
+
+<back>
+    <!--
+    <references title="Normative References">
+    </references>
+    <references title="Informative References">
+    </references>
+    -->
+    &pandocBack;
+</back>
+</rfc>
