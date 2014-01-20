@@ -14,12 +14,13 @@ Table of Contents
 
    1.  SkyDNS  . . . . . . . . . . . . . . . . . . . . . . . . . . .   1
    2.  Services  . . . . . . . . . . . . . . . . . . . . . . . . . .   1
+     2.1.  Naming  . . . . . . . . . . . . . . . . . . . . . . . . .   2
    3.  Service Registration  . . . . . . . . . . . . . . . . . . . .   2
    4.  Service Discovery . . . . . . . . . . . . . . . . . . . . . .   2
    5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   2
      5.1.  Normative References  . . . . . . . . . . . . . . . . . .   0
      5.2.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   2
-   Appendix A.  Back . . . . . . . . . . . . . . . . . . . . . . . .   2
+   Appendix A.  Back . . . . . . . . . . . . . . . . . . . . . . . .   3
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   3
 
 1.  SkyDNS
@@ -46,8 +47,7 @@ Table of Contents
 
 2.  Services
 
-   SkyDNS divides the name for a service in different components, as
-   follows:
+
 
 
 
@@ -57,6 +57,11 @@ Ketelsen, et al.          Expires July 24, 2014                 [Page 1]
 
                                  SkyDNS                     January 2014
 
+
+2.1.  Naming
+
+   SkyDNS divides the name for a service in different components, as
+   follows:
 
    Name:  The name of your service, e.g., "rails" or "web".  Note that
       in this document we sometimes refer to this as Service.
@@ -100,11 +105,6 @@ Ketelsen, et al.          Expires July 24, 2014                 [Page 1]
 
    [1] http://blog.gopheracademy.com/skydns
 
-Appendix A.  Back
-
-   This is the back section
-
-
 
 
 
@@ -113,6 +113,10 @@ Ketelsen, et al.          Expires July 24, 2014                 [Page 2]
 
                                  SkyDNS                     January 2014
 
+
+Appendix A.  Back
+
+   This is the back section
 
 Authors' Addresses
 
@@ -130,10 +134,6 @@ Authors' Addresses
 
    Email: miek@miek.nl
    URI:   http://miek.nl
-
-
-
-
 
 
 

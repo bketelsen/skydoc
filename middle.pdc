@@ -20,6 +20,8 @@ The development of SkyDNS takes place on Github ([](#SkyDNS-git)).
 
 # Services
 
+## Naming
+
 SkyDNS divides the name for a service in different components, as follows:
 
 Name:
