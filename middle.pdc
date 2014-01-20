@@ -16,29 +16,47 @@ connect to your service, SkyDNS will also return A records. This is useful if
 you already know what port a particular service is using, and you just want a
 list of IP addresses with known running instances.
 
+The development of SkyDNS takes place on Github ([](#SkyDNS-git)). 
+
+# Services
+
+SkyDNS divides the name for a service in different components, as follows:
+
+Name:
+:   The name of your service, e.g., "rails" or "web". Note that in this
+    document we sometimes refer to this as Service.
+
+Environment:
+:   Denotes the environment of the service, e.g. "production" or "testing".
+
+Region:
+:   Where do these hosts live, e.g. "east", "west" or even "test".
+
+Version:
+:   A version string, e.g. "1.0.1".
+
+Host:
+:   The hostname of a machine running the service.
+
+A service name will use these components in a fixed order:
+
+    <Host>.<Version>.<Region>.<Name>.<Environment>
+    
+Service names are registred by a submitting an HTTP query (with JSON data) to SkyDNS, 
+see [](#service-registration)
+for more details. Querying SkyDNS can be done either via HTTP or via the DNS (see
+[](#service-discovery)).
+
+
+# Service Registration
+
+TODO
+
+# Service Discovery
+
+TODO
+
 <!--
-
-##Setup / Install
-
-Compile SkyDNS, and execute it
-
-`go get -d -v ./... && go build -v ./...`
-
-`./skydns`
-
-Which takes the following flags
-- -domain - This is the domain requests are anchored to and should be appended to all requests (Defaults to: skydns.local)
-- -http - This is the HTTP ip:port to listen on for API request (Defaults to: 127.0.0.1:8080)
-- -dns - This is the ip:port to listen on for DNS requests (Defaults to: 127.0.0.1:53)
-- -data - Directory that Raft logs will be stored in (Defaults to: ./data)
-- -join - When running a cluster of SkyDNS servers as recommended, you'll need to supply followers with where the other members can be found, this can be any member or a comma separated list of members. It does not have to be the leader. Any non-leader you join will redirect you to the leader automatically.
-- -discover - This flag can be used in place of explicitly supplying cluster members via the -join flag. It performs a DNS lookup using the hosts DNS server for NS records associated with the -domain flag to find the SkyDNS instances.
-- -metricsToStdErr - When this flag is set to true, metrics will be periodically written to standard error
-- -graphiteServer - When this flag is set to a Graphite Server URL:PORT, metrics will be posted to a graphite server
-- -stathatUser - When this flag is set to a valid StatHat user, metrics will be posted to that user's StatHat account periodically
-- -secret - When this variable is set, the HTTP api will require an authorization header that matches the secret passed to skydns when it starts  
-- -nameserver - Nameserver address to forward (non-local) queries to e.g. "8.8.8.8:53,8.8.4.4:53", in other words an IP:PORT, where multiple nameservers maybe listed separated by a comma "`,`". If this list is empty (""),
-SkyDNS will parse /etc/resolv.conf and will use the nameservers listed there.
 
 ##API
 ### Service Announcements
@@ -47,16 +65,6 @@ This information will then be available for queries either via DNS or HTTP.
 
 When providing information you will need to fill out the following values. Note you are free to use
 whatever you like, so take the following list as a guide only.
-
-* Name - The name of your service, e.g., "rails", "web" or anything else you like
-* Version - A version string, note the dots in this string are translated to hyphens when
-    querying via the DNS
-* Environment - Can be something as "production" or "testing"
-* Region - Where do these hosts live, e.g. "east", "west" or even "test"
-* Host, Port and TTL - Denote the actuals hosts and how long (TTL) this information is valid.
-
-When queried SkyDNS will return records containing these elements in the following
-order:
 
     <uuid>.<host>.<region>.<version>.<service>.<environment>.skydns.local
 

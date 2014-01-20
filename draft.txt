@@ -1,0 +1,168 @@
+
+
+
+
+                 SkyDNS: Distributed Service Discovery
+
+Abstract
+
+   SkyDNS is a distributed service for announcement and discovery of
+   services.  It leverages Raft for high-availability and consensus, and
+   utilizes DNS queries to discover available services.
+
+Table of Contents
+
+   1.  SkyDNS  . . . . . . . . . . . . . . . . . . . . . . . . . . .   1
+   2.  Services  . . . . . . . . . . . . . . . . . . . . . . . . . .   1
+   3.  Service Registration  . . . . . . . . . . . . . . . . . . . .   2
+   4.  Service Discovery . . . . . . . . . . . . . . . . . . . . . .   2
+   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   2
+     5.1.  Normative References  . . . . . . . . . . . . . . . . . .   0
+     5.2.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   2
+   Appendix A.  Back . . . . . . . . . . . . . . . . . . . . . . . .   2
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   3
+
+1.  SkyDNS
+
+   SkyDNS (Announcement Blog Post [1]) is a distributed service for
+   announcement and discovery of services.  It leverages Raft ([Raft])
+   for high-availability and consensus, and utilizes DNS queries to
+   discover available services.  This is done by leveraging SRV records
+   in DNS, with special meaning given to subdomains, priorities and
+   weights.
+
+   SkyDNS will also act as a forwarding DNS proxy, so that you can set
+   your SkyDNS instance as the primary DNS service in "/etc/resolv.conf"
+   and SkyDNS will forward and proxy requests for which it is not
+   authoritative.
+
+   Besides serving SRV records, which include _all_ the information you
+   need to connect to your service, SkyDNS will also return A records.
+   This is useful if you already know what port a particular service is
+   using, and you just want a list of IP addresses with known running
+   instances.
+
+   The development of SkyDNS takes place on Github ([SkyDNS-git]).
+
+2.  Services
+
+   SkyDNS divides the name for a service in different components, as
+   follows:
+
+
+
+
+
+Ketelsen, et al.          Expires July 24, 2014                 [Page 1]
+
+                                 SkyDNS                     January 2014
+
+
+   Name:  The name of your service, e.g., "rails" or "web".  Note that
+      in this document we sometimes refer to this as Service.
+
+   Environment:  Denotes the environment of the service, e.g.
+      "production" or "testing".
+
+   Region:  Where do these hosts live, e.g. "east", "west" or even
+      "test".
+
+   Version:  A version string, e.g. "1.0.1".
+
+   Host:  The hostname of a machine running the service.
+
+   A service name will use these components in a fixed order:
+
+   <Host>.<Version>.<Region>.<Name>.<Environment>
+
+   Service names are registred by a submitting an HTTP query (with JSON
+   data) to SkyDNS, see Section 3 for more details.  Querying SkyDNS can
+   be done either via HTTP or via the DNS (see Section 4)
+
+3.  Service Registration
+
+   TODO
+
+4.  Service Discovery
+
+   TODO
+
+5.  References
+
+   [Raft]     Ongaro, D. and J. Ousterhout, "In Search of an
+              Understandable Consensus Algorithm.", October 2013.
+
+   [SkyDNS-git]
+              Martin, E., Ketelsen, B., Gieben, R., Carey, C., and C.
+              Crosby, "SkyDNS Git repository.", 2012.
+
+5.2.  URIs
+
+   [1] http://blog.gopheracademy.com/skydns
+
+Appendix A.  Back
+
+   This is the back section
+
+
+
+
+
+
+Ketelsen, et al.          Expires July 24, 2014                 [Page 2]
+
+                                 SkyDNS                     January 2014
+
+
+Authors' Addresses
+
+   Brian Ketelsen
+
+   Email: bketelsen@gmail.com
+
+
+   Erik St. Martin
+
+   Email: alakriti@gmail.com
+
+
+   R. (Miek) Gieben
+
+   Email: miek@miek.nl
+   URI:   http://miek.nl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ketelsen, et al.          Expires July 24, 2014                 [Page 3]
