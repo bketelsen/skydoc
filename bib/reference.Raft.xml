@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<reference anchor='Raft'>
+<front>
+
+<title>In Search of an Understandable Consensus Algorithm.</title>
+<author initials='D.' surname='Ongaro' fullname='Diego Ongaro'> <organization /> </author>
+<author initials='J.' surname='Ousterhout' fullname='John Ousterhout'> <organization /> </author>
+<date month='October' year='2013' />
+</front>
+<format type='PDF' target='https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf' />
+</reference>

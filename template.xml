@@ -4,10 +4,11 @@
 <!ENTITY pandocMiddle   PUBLIC '' 'middle.xml'>
 <!ENTITY pandocBack     PUBLIC '' 'back.xml'>
 
-<!-- <!ENTITY rfc5731        PUBLIC '' 'bib/reference.RFC.5731.xml'> -->
+<!ENTITY Raft        PUBLIC '' 'bib/reference.Raft.xml'>
+<!ENTITY SkyDNS-git  PUBLIC '' 'bib/reference.SkyDNS-git.xml'>
 ]>
 
-<rfc ipr="trust200902" category="std" docName="draft-gieben-epp-keyrelay-03">
+<rfc ipr="trust200902" category="std" docName="">
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
@@ -20,14 +21,14 @@
         <author initials="B." surname="Ketelsen" fullname="Brian Ketelsen">
             <address>
                 <phone></phone>
-                <email>x@x.com</email>
+                <email>bketelsen@gmail.com</email>
                 <uri></uri>
             </address>
         </author>
         <author initials="E." surname="Martin" fullname="Erik St. Martin">
             <address>
                 <phone></phone>
-                <email>x@x.com</email>
+                <email>alakriti@gmail.com</email>
                 <uri></uri>
             </address>
         </author>
@@ -58,9 +59,11 @@
 </middle>
 
 <back>
-    <!--
     <references title="Normative References">
+        &Raft;
+        &SkyDNS-git;
     </references>
+    <!--
     <references title="Informative References">
     </references>
     -->

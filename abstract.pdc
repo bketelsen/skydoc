@@ -1,1 +1,3 @@
-This is the abstract
+SkyDNS is a distributed service for announcement and discovery of services. It
+leverages Raft for high-availability and consensus, and utilizes DNS queries
+to discover available services.

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<reference anchor='SkyDNS-git'>
+<front>
+
+<title>SkyDNS Git repository.</title>
+<author initials='E.' surname='Martin' fullname='Erik St. Martin'> <organization/> </author>
+<author initials='B.' surname='Ketelsen' fullname='Brian Ketelsen '> <organization/> </author>
+<author initials='R.' surname='Gieben' fullname='R. (Miek) Gieben'> <organization/> </author>
+<author initials='C.' surname='Carey' fullname='Sean Carey'> <organization/> </author>
+<author initials='C.' surname='Crosby' fullname='Michael Crosby'> <organization/> </author>
+<date year='2012' />
+
+</front>
+<format type='GIT' target='http://github.com/skynetservices/skydns' />
+</reference>
