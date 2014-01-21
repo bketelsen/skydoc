@@ -6,7 +6,7 @@
 
 <!ENTITY Golang      PUBLIC '' 'bib/reference.Golang.xml'>
 <!ENTITY Raft        PUBLIC '' 'bib/reference.Raft.xml'>
-<!ENTITY RFC4627     PUBLIC '' 'bib/reference.RFC4627.xml'>
+<!ENTITY RFC4627     PUBLIC '' 'bib/reference.RFC.4627.xml'>
 <!ENTITY SkyDNS-git  PUBLIC '' 'bib/reference.SkyDNS-git.xml'>
 ]>
 
