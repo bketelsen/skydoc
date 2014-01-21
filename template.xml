@@ -4,6 +4,7 @@
 <!ENTITY pandocMiddle   PUBLIC '' 'middle.xml'>
 <!ENTITY pandocBack     PUBLIC '' 'back.xml'>
 
+<!ENTITY Golang      PUBLIC '' 'bib/reference.Golang.xml'>
 <!ENTITY Raft        PUBLIC '' 'bib/reference.Raft.xml'>
 <!ENTITY SkyDNS-git  PUBLIC '' 'bib/reference.SkyDNS-git.xml'>
 ]>
@@ -14,7 +15,7 @@
 <?rfc sortrefs="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<?rfc private="no"?>
+<?rfc private="yes"?>
 <?rfc topblock="no"?>
  <front>
         <title abbrev="SkyDNS">SkyDNS: Distributed Service Discovery</title>
@@ -60,6 +61,7 @@
 
 <back>
     <references title="Normative References">
+        &Golang;
         &Raft;
         &SkyDNS-git;
     </references>

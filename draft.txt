@@ -10,66 +10,29 @@ Abstract
    services.  It leverages Raft for high-availability and consensus, and
    utilizes DNS queries to discover available services.
 
-Status of This Memo
-
-   This Internet-Draft is submitted in full conformance with the
-   provisions of BCP 78 and BCP 79.
-
-   Internet-Drafts are working documents of the Internet Engineering
-   Task Force (IETF).  Note that other groups may also distribute
-   working documents as Internet-Drafts.  The list of current Internet-
-   Drafts is at http://datatracker.ietf.org/drafts/current/.
-
-   Internet-Drafts are draft documents valid for a maximum of six months
-   and may be updated, replaced, or obsoleted by other documents at any
-   time.  It is inappropriate to use Internet-Drafts as reference
-   material or to cite them other than as "work in progress."
-
-   This Internet-Draft will expire on July 24, 2014.
-
-Copyright Notice
-
-   Copyright (c) 2014 IETF Trust and the persons identified as the
-   document authors.  All rights reserved.
-
-   This document is subject to BCP 78 and the IETF Trust's Legal
-   Provisions Relating to IETF Documents
-   (http://trustee.ietf.org/license-info) in effect on the date of
-   publication of this document.  Please review these documents
-   carefully, as they describe your rights and restrictions with respect
-   to this document.  Code Components extracted from this document must
-   include Simplified BSD License text as described in Section 4.e of
-   the Trust Legal Provisions and are provided without warranty as
-   described in the Simplified BSD License.
-
 Table of Contents
 
-   1.  SkyDNS  . . . . . . . . . . . . . . . . . . . . . . . . . . .   2
+   1.  SkyDNS  . . . . . . . . . . . . . . . . . . . . . . . . . . .   1
    2.  Services  . . . . . . . . . . . . . . . . . . . . . . . . . .   2
      2.1.  Naming  . . . . . . . . . . . . . . . . . . . . . . . . .   2
-   3.  Service Registration  . . . . . . . . . . . . . . . . . . . .   3
-   4.  Service Discovery . . . . . . . . . . . . . . . . . . . . . .   3
-   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   3
-
-
-
-Ketelsen, et al.          Expires July 24, 2014                 [Page 1]
-
-Internet-Draft                   SkyDNS                     January 2014
-
-
-     5.1.  Normative References  . . . . . . . . . . . . . . . . . .   0
-     5.2.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   3
-   Appendix A.  Back . . . . . . . . . . . . . . . . . . . . . . . .   3
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   3
+   3.  Service Management  . . . . . . . . . . . . . . . . . . . . .   2
+   4.  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   2
+   5.  Service Discovery . . . . . . . . . . . . . . . . . . . . . .   2
+   6.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   2
+   7.  Security Considerationso  . . . . . . . . . . . . . . . . . .   3
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   3
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   0
+     8.2.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   Appendix A.  License  . . . . . . . . . . . . . . . . . . . . . .   3
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   4
 
 1.  SkyDNS
 
    SkyDNS (Announcement Blog Post [1]) is a distributed service for
    announcement and discovery of services.  It leverages Raft ([Raft])
    for high-availability and consensus, and utilizes DNS queries to
-   discover available services.  This is done by leveraging SRV records
-   in DNS, with special meaning given to subdomains, priorities and
+   discover available services.  This is done by using SRV records in
+   DNS, with special meaning given to subdomains, priorities and
    weights.
 
    SkyDNS will also act as a forwarding DNS proxy, so that you can set
@@ -84,14 +47,24 @@ Internet-Draft                   SkyDNS                     January 2014
    instances.
 
    The development of SkyDNS takes place on Github ([SkyDNS-git]).
+   SkyDNS is written in the Go language ([Golang]).  It is licenced
+   under the MIT License, see Section 4#(License).
+
+
+
+
+Ketelsen, et al.          Expires July 25, 2014                 [Page 1]
+
+                                 SkyDNS                     January 2014
+
 
 2.  Services
 
 2.1.  Naming
 
-   Service names are registred by a submitting an HTTP query (with JSON
+   Service names are registered by a submitting an HTTP query (with JSON
    data) to SkyDNS, see Section 3 for more details.  Querying SkyDNS can
-   be done either via HTTP or via the DNS (see Section 4).  SkyDNS
+   be done either via HTTP or via the DNS (see Section 5).  SkyDNS
    divides the name for a service in different components, as follows:
 
    Name:  The name of your service, e.g., "rails" or "web".  Note that
@@ -107,41 +80,95 @@ Internet-Draft                   SkyDNS                     January 2014
 
    Host:  The hostname of a machine running the service.
 
-
-
-Ketelsen, et al.          Expires July 24, 2014                 [Page 2]
-
-Internet-Draft                   SkyDNS                     January 2014
-
-
    A service name will use these components in a fixed order:
 
-   <Host>.<Version>.<Region>.<Name>.<Environment>
+   "Host" "Version" "Region" "Name" "Environment"
 
-3.  Service Registration
+   Each registered service has a time to live (TTL).  When the TTL
+   expires the services is expunged from SkyDNS.
+
+3.  Service Management
+
+4.
 
    TODO
 
-4.  Service Discovery
+5.  Service Discovery
 
    TODO
 
-5.  References
+6.  Implementation
+
+   The current implementation of SkyDNS ([SkyDNS-git], consists out of
+   server and a client library.  This client library is used in a
+   command line tool "skydnsctl" which allows for easy registration and
+   querying of SkyDNS.
+
+
+
+
+
+
+Ketelsen, et al.          Expires July 25, 2014                 [Page 2]
+
+                                 SkyDNS                     January 2014
+
+
+7.  Security Considerationso
+
+   TODO
+
+8.  References
+
+   [Golang]   "The Go Programming Language", 2011.
 
    [Raft]     Ongaro, D. and J. Ousterhout, "In Search of an
-              Understandable Consensus Algorithm.", October 2013.
+              Understandable Consensus Algorithm", October 2013.
 
    [SkyDNS-git]
               Martin, E., Ketelsen, B., Gieben, R., Carey, C., and C.
-              Crosby, "SkyDNS Git repository.", 2012.
+              Crosby, "SkyDNS Git repository", 2012.
 
-5.2.  URIs
+8.2.  URIs
 
    [1] http://blog.gopheracademy.com/skydns
 
-Appendix A.  Back
+Appendix A.  License
 
-   This is the back section
+   The MIT License (MIT)
+
+   Copyright (C) 2013 Erik St. Martin, Brian Ketelsen
+
+   Permission is hereby granted, free of charge, to any person obtaining
+   a copy of this software and associated documentation files (the
+   "Software"), to deal in the Software without restriction, including
+   without limitation the rights to use, copy, modify, merge, publish,
+   distribute, sublicense, and/or sell copies of the Software, and to
+   permit persons to whom the Software is furnished to do so, subject to
+   the following conditions:
+
+   The above copyright notice and this permission notice shall be
+   included in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+   NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+
+
+
+
+
+
+Ketelsen, et al.          Expires July 25, 2014                 [Page 3]
+
+                                 SkyDNS                     January 2014
+
 
 Authors' Addresses
 
@@ -165,4 +192,33 @@ Authors' Addresses
 
 
 
-Ketelsen, et al.          Expires July 24, 2014                 [Page 3]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ketelsen, et al.          Expires July 25, 2014                 [Page 4]

@@ -17,14 +17,14 @@ you already know what port a particular service is using, and you just want a
 list of IP addresses with known running instances.
 
 The development of SkyDNS takes place on Github ([](#SkyDNS-git)). SkyDNS is written
-in the Go language ([](#Golang).
+in the Go language ([](#Golang)). It is licenced under the MIT License, see []#(License).
 
 # Services
 
 ## Naming
 
-Service names are registred by a submitting an HTTP query (with JSON data) to SkyDNS, 
-see [](#service-registration)
+Service names are registered by a submitting an HTTP query (with JSON data) to SkyDNS, 
+see [](#service-management)
 for more details. Querying SkyDNS can be done either via HTTP or via the DNS (see
 [](#service-discovery)).
 SkyDNS divides the name for a service in different components, as follows:
@@ -49,9 +49,12 @@ A service name will use these components in a fixed order:
 
     "Host" "Version" "Region" "Name" "Environment"
     
+Each registered service has a time to live (TTL). When the TTL expires the services
+is expunged from SkyDNS.
 
+# Service Management
 
-# Service Registration
+#
 
 TODO
 
@@ -288,26 +291,4 @@ discovery and normal DNS operations.
 
 *Please test this before relying on it in production, as there may be edge cases that don't work as planned.*
 
-## License
-The MIT License (MIT)
-
-Copyright © 2013 Erik St. Martin, Brian Ketelsen
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
 -->
