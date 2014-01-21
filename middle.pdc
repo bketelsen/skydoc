@@ -175,6 +175,16 @@ The current implementation of SkyDNS ([](#SkyDNS-git), consists out of server an
 library. This client library is used in a command line tool `skydnsctl` which allows for
 easy registration and querying of SkyDNS.
 
+## DNS Forwarding
+
+By specifying nameserver on the `skydns` command line, you create a DNS
+forwarding proxy. Requests for which SkyDNS isn't authoritative
+will be forwarded and proxied back to the client. This means that you can set
+SkyDNS as the primary DNS server and use it for both service discovery and normal DNS operations. 
+
+When provided with more than one nameserver SkyDNS will round robin between the them to spread the load.
+
+*Please test this before relying on it in production, as there may be edge cases that don't work as planned.*
 
 # Security Considerationso
 
@@ -214,122 +224,5 @@ This allows for you to supply only the positions you care about:
 In addition to only needing to specify as much of the domain as required for the granularity level you're looking for, you may also supply the wildcard `*` in any of the positions.
 
 - east.*.*.production.skydns.local - Would return all services in the East region, that are a part of the production environment.
-
-###Examples
-
-Let's take a look at some results. First we need to add a few services so we have services to query against.
-
-	// Service 1001 (East Region)
-	curl -X PUT -L http://localhost:8080/skydns/services/1001 -d '{"Name":"TestService","Version":"1.0.0","Environment":"Production","Region":"East","Host":"web1.site.com","Port":80,"TTL":4000}'
-	
-	// Service 1002 (East Region)
-	curl -X PUT -L http://localhost:8080/skydns/services/1002 -d '{"Name":"TestService","Version":"1.0.0","Environment":"Production","Region":"East","Host":"web2.site.com","Port":8080,"TTL":4000}'
-	
-	// Service 1003 (West Region)
-	curl -X PUT -L http://localhost:8080/skydns/services/1003 -d '{"Name":"TestService","Version":"1.0.0","Environment":"Production","Region":"West","Host":"web3.site.com","Port":80,"TTL":4000}'
-	
-	// Service 1004 (West Region)
-	curl -X PUT -L http://localhost:8080/skydns/services/1004 -d '{"Name":"TestService","Version":"1.0.0","Environment":"Production","Region":"West","Host":"web4.site.com","Port":80,"TTL":4000}'
-
-Now we can try some of our example DNS lookups:
-#####All services in the Production Environment
-`dig @localhost production.skydns.local SRV`
-
-	;; QUESTION SECTION:
-	;production.skydns.local.			IN	SRV
-
-	;; ANSWER SECTION:
-	production.skydns.local.		629		IN	SRV	10 20 80   web1.site.com.
-	production.skydns.local.		3979	IN	SRV	10 20 8080 web2.site.com.
-	production.skydns.local.		3629	IN	SRV	10 20 9000 server24.
-	production.skydns.local.		3985	IN	SRV	10 20 80   web3.site.com.
-	production.skydns.local.		3990	IN	SRV	10 20 80   web4.site.com.
-
-#####All TestService instances in Production Environment
-`dig @localhost testservice.production.skydns.local SRV`
-
-	;; QUESTION SECTION:
-	;testservice.production.skydns.local.		IN	SRV
-
-	;; ANSWER SECTION:
-	testservice.production.skydns.local.	615		IN	SRV	10 20 80   web1.site.com.
-	testservice.production.skydns.local.	3966	IN	SRV	10 20 8080 web2.site.com.
-	testservice.production.skydns.local.	3615	IN	SRV	10 20 9000 server24.
-	testservice.production.skydns.local.	3972	IN	SRV	10 20 80   web3.site.com.
-	testservice.production.skydns.local.	3976	IN	SRV	10 20 80   web4.site.com.
-
-#####All TestService v1.0.0 Instances in Production Environment
-`dig @localhost 1-0-0.testservice.production.skydns.local SRV`
-
-	;; QUESTION SECTION:
-	;1-0-0.testservice.production.skydns.local.	IN	SRV
-
-	;; ANSWER SECTION:
-	1-0-0.testservice.production.skydns.local. 600  IN	SRV	10 20 80   web1.site.com.
-	1-0-0.testservice.production.skydns.local. 3950 IN	SRV	10 20 8080 web2.site.com.
-	1-0-0.testservice.production.skydns.local. 3600 IN	SRV	10 20 9000 server24.
-	1-0-0.testservice.production.skydns.local. 3956 IN	SRV	10 20 80   web3.site.com.
-	1-0-0.testservice.production.skydns.local. 3961 IN	SRV	10 20 80   web4.site.com.
-
-#####All TestService Instances at any version, within the East region
-`dig @localhost east.*.testservice.production.skydns.local SRV`
-
-This is where we've changed things up a bit, notice we used the "*" wildcard for
-version so we get any version, and because we've supplied an explicit region
-that we're looking for we get that as the highest DNS priority, with the weight
-being distributed evenly, then all of our West instances still show up for
-fail-over, but with a higher Priority.
-
-	;; QUESTION SECTION:
-	;east.*.testservice.production.skydns.local. IN	SRV
-
-	;; ANSWER SECTION:
-	east.*.testservice.production.skydns.local. 531  IN SRV	10 50 80   web1.site.com.
-	east.*.testservice.production.skydns.local. 3881 IN SRV	10 50 8080 web2.site.com.
-	east.*.testservice.production.skydns.local. 3531 IN SRV	20 33 9000 server24.
-	east.*.testservice.production.skydns.local. 3887 IN SRV	20 33 80   web3.site.com.
-	east.*.testservice.production.skydns.local. 3892 IN SRV	20 33 80   web4.site.com.
-
-
-####A Records
-To return A records, simply run a normal DNS query for a service matching the above patterns.
-
-Let's add some web servers to SkyDNS:
-
-	curl -X PUT -L http://localhost:8080/skydns/services/1011 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.10","Port":80,"TTL":400000}'
-	curl -X PUT -L http://localhost:8080/skydns/services/1012 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.11","Port":80,"TTL":400000}'
-	curl -X PUT -L http://localhost:8080/skydns/services/1013 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.12","Port":80,"TTL":400000}'
-	curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.13","Port":80,"TTL":400000}'
-
-Now do a normal DNS query:
-`dig rails.production.skydns.local`
-
-	;; QUESTION SECTION:
-	;rails.production.skydns.local.	IN	A
-
-	;; ANSWER SECTION:
-	rails.production.skydns.local. 399918 IN A	127.0.0.10
-	rails.production.skydns.local. 399918 IN A	127.0.0.11
-	rails.production.skydns.local. 399918 IN A	127.0.0.12
-	rails.production.skydns.local. 399919 IN A	127.0.0.13
-
-Now you have a list of all known IP Addresses registered running the `rails`
-service name. Because we're returning A records and not SRV records, there
-are no ports listed, so this is only useful when you're querying for services
-running on ports known to you in advance. Notice, we didn't specify version or
-region, but we could have.
-
-####DNS Forwarding
-
-By specifying `-nameserver="8.8.8.8:53,8.8.4.4:53` on the `skydns` command line,
-you create a DNS forwarding proxy. In this case it round robins between the two
-nameserver IPs mentioned on the command line.
-
-Requests for which SkyDNS isn't authoritative
-will be forwarded and proxied back to the client. This means that you can set
-SkyDNS as the primary DNS server in `/etc/resolv.conf` and use it for both service
-discovery and normal DNS operations. 
-
-*Please test this before relying on it in production, as there may be edge cases that don't work as planned.*
 
 -->

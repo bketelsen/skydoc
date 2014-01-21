@@ -1,3 +1,89 @@
+# Examples
+
+In this document we used the `skydnsctl` command line utility to query SkyDNS, but as SkyDNS is using
+of the shelve protcols (HTTP and DNS) you can basically use whatever tool you like. Even the standard
+resolving library in libc will suffice.
+
+For instance, registering a service with `curl`:
+
+	curl -X PUT -L http://localhost:8080/skydns/services/1001 -d \
+         '{"Name":"TestService", "Version":"1.0.0","Environment":"Production",
+          "Region":"East","Host":"web1.site.com","Port":80,"TTL":4000}'
+
+And then looking up services with `dig`.
+
+All service in the production environment:
+
+        dig @localhost production.skydns.local SRV
+
+Which will result in:
+
+	;; ANSWER SECTION:
+	production.skydns.local.  3979 IN SRV 10 20 80 web1.site.com.
+
+TODO from here:
+
+ All TestService v1.0.0 Instances in Production Environment
+`dig @localhost 1-0-0.testservice.production.skydns.local SRV`
+
+	;; QUESTION SECTION:
+	;1-0-0.testservice.production.skydns.local.	IN	SRV
+
+	;; ANSWER SECTION:
+	1-0-0.testservice.production.skydns.local. 600  IN	SRV	10 20 80   web1.site.com.
+	1-0-0.testservice.production.skydns.local. 3950 IN	SRV	10 20 8080 web2.site.com.
+	1-0-0.testservice.production.skydns.local. 3600 IN	SRV	10 20 9000 server24.
+	1-0-0.testservice.production.skydns.local. 3956 IN	SRV	10 20 80   web3.site.com.
+	1-0-0.testservice.production.skydns.local. 3961 IN	SRV	10 20 80   web4.site.com.
+
+ All TestService Instances at any version, within the East region
+`dig @localhost east.*.testservice.production.skydns.local SRV`
+
+This is where we've changed things up a bit, notice we used the "*" wildcard for
+version so we get any version, and because we've supplied an explicit region
+that we're looking for we get that as the highest DNS priority, with the weight
+being distributed evenly, then all of our West instances still show up for
+fail-over, but with a higher Priority.
+
+	;; QUESTION SECTION:
+	;east.*.testservice.production.skydns.local. IN	SRV
+
+	;; ANSWER SECTION:
+	east.*.testservice.production.skydns.local. 531  IN SRV	10 50 80   web1.site.com.
+	east.*.testservice.production.skydns.local. 3881 IN SRV	10 50 8080 web2.site.com.
+	east.*.testservice.production.skydns.local. 3531 IN SRV	20 33 9000 server24.
+	east.*.testservice.production.skydns.local. 3887 IN SRV	20 33 80   web3.site.com.
+	east.*.testservice.production.skydns.local. 3892 IN SRV	20 33 80   web4.site.com.
+
+
+ A Records
+To return A records, simply run a normal DNS query for a service matching the above patterns.
+
+Let's add some web servers to SkyDNS:
+
+	curl -X PUT -L http://localhost:8080/skydns/services/1011 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.10","Port":80,"TTL":400000}'
+	curl -X PUT -L http://localhost:8080/skydns/services/1012 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.11","Port":80,"TTL":400000}'
+	curl -X PUT -L http://localhost:8080/skydns/services/1013 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.12","Port":80,"TTL":400000}'
+	curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.13","Port":80,"TTL":400000}'
+
+Now do a normal DNS query:
+`dig rails.production.skydns.local`
+
+	;; QUESTION SECTION:
+	;rails.production.skydns.local.	IN	A
+
+	;; ANSWER SECTION:
+	rails.production.skydns.local. 399918 IN A	127.0.0.10
+	rails.production.skydns.local. 399918 IN A	127.0.0.11
+	rails.production.skydns.local. 399918 IN A	127.0.0.12
+	rails.production.skydns.local. 399919 IN A	127.0.0.13
+
+Now you have a list of all known IP Addresses registered running the `rails`
+service name. Because we're returning A records and not SRV records, there
+are no ports listed, so this is only useful when you're querying for services
+running on ports known to you in advance. Notice, we didn't specify version or
+region, but we could have.
+
 # License
 The MIT License (MIT)
 
@@ -20,3 +106,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
