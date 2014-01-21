@@ -184,7 +184,8 @@ SkyDNS as the primary DNS server and use it for both service discovery and norma
 
 When provided with more than one nameserver SkyDNS will round robin between the them to spread the load.
 
-*Please test this before relying on it in production, as there may be edge cases that don't work as planned.*
+> Please test this before relying on it in production, as there may be edge cases
+> that don't work as planned.
 
 # Security Considerationso
 

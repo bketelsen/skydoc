@@ -311,8 +311,8 @@ Internet-Draft                   SkyDNS                     January 2014
    When provided with more than one nameserver SkyDNS will round robin
    between the them to spread the load.
 
-   _Please test this before relying on it in production, as there may be
-   edge cases that don't work as planned._
+      Please test this before relying on it in production, as there may
+      be edge cases that don't work as planned.
 
 6.  Security Considerationso
 
