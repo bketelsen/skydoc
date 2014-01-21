@@ -45,10 +45,10 @@ Copyright Notice
 Table of Contents
 
    1.  SkyDNS  . . . . . . . . . . . . . . . . . . . . . . . . . . .   2
-   2.  Services  . . . . . . . . . . . . . . . . . . . . . . . . . .   3
-     2.1.  Naming  . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Services  . . . . . . . . . . . . . . . . . . . . . . . . . .   2
+     2.1.  Naming  . . . . . . . . . . . . . . . . . . . . . . . . .   2
    3.  Service Management  . . . . . . . . . . . . . . . . . . . . .   3
-     3.1.  Registration  . . . . . . . . . . . . . . . . . . . . . .   4
+     3.1.  Registration  . . . . . . . . . . . . . . . . . . . . . .   3
      3.2.  Heartbeat . . . . . . . . . . . . . . . . . . . . . . . .   4
 
 
@@ -66,18 +66,12 @@ Internet-Draft                   SkyDNS                     January 2014
    5.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   6
      5.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   6
    6.  Security Considerationso  . . . . . . . . . . . . . . . . . .   6
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
      7.1.  Normative References  . . . . . . . . . . . . . . . . . .   0
      7.2.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   7
-   Appendix A.  License  . . . . . . . . . . . . . . . . . . . . . .   7
-     A.1.  Examples  . . . . . . . . . . . . . . . . . . . . . . . .   8
-       A.1.1.  All TestService instances in Production Environment .   8
-       A.1.2.  All TestService v1.0.0 Instances in Production
-               Environment . . . . . . . . . . . . . . . . . . . . .   9
-       A.1.3.  All TestService Instances at any version, within the
-               East region . . . . . . . . . . . . . . . . . . . . .   9
-       A.1.4.  A Records . . . . . . . . . . . . . . . . . . . . . .   9
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   7
+   Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .   9
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
 
 1.  SkyDNS
 
@@ -103,17 +97,6 @@ Internet-Draft                   SkyDNS                     January 2014
    SkyDNS is written in the Go language ([Golang]).  It is licenced
    under the MIT License, see []#(License).
 
-
-
-
-
-
-
-Ketelsen, et al.          Expires July 25, 2014                 [Page 2]
-
-Internet-Draft                   SkyDNS                     January 2014
-
-
 2.  Services
 
 2.1.  Naming
@@ -122,6 +105,14 @@ Internet-Draft                   SkyDNS                     January 2014
    data) to SkyDNS, see Section 3 for more details.  Querying SkyDNS can
    be done either via HTTP or via the DNS (see Section 4).  SkyDNS
    divides the name for a service in different components, as follows:
+
+
+
+
+Ketelsen, et al.          Expires July 25, 2014                 [Page 2]
+
+Internet-Draft                   SkyDNS                     January 2014
+
 
    Name:  The name of your service, e.g., "rails" or "web".  Note that
       in this document we sometimes refer to this as Service.
@@ -159,6 +150,15 @@ Internet-Draft                   SkyDNS                     January 2014
    SkyDNS also supports a shared secret which is used for
    authoritzation.
 
+3.1.  Registration
+
+   Whe registring a service a client generates an UUID (denoted $UUID
+   here) and makes a HTTP PUT request to `/skydns/services/$UUID` with
+   the following JSON payload:
+
+
+
+
 
 
 
@@ -169,12 +169,6 @@ Ketelsen, et al.          Expires July 25, 2014                 [Page 3]
 
 Internet-Draft                   SkyDNS                     January 2014
 
-
-3.1.  Registration
-
-   Whe registring a service a client generates an UUID (denoted $UUID
-   here) and makes a HTTP PUT request to `/skydns/services/$UUID` with
-   the following JSON payload:
 
    {
      "Name":"TestService",
@@ -219,17 +213,18 @@ Internet-Draft                   SkyDNS                     January 2014
    This will allow for nodes to fail and DNS to reflect this quickly
    (also see Section 3.4).
 
+   The TTL can be updated by sending an HTTP PATCH request to SkyDNS ("/
+   skydns/services/$UUID") with an updated TTL: "{ "TTL":20 }".
+
+   TODO(miek): patch other things too.
+
+
 
 
 Ketelsen, et al.          Expires July 25, 2014                 [Page 4]
 
 Internet-Draft                   SkyDNS                     January 2014
 
-
-   The TTL can be updated by sending an HTTP PATCH request to SkyDNS ("/
-   skydns/services/$UUID") with an updated TTL: "{ "TTL":20 }".
-
-   TODO(miek): patch other things too.
 
 3.3.  Deregistration
 
@@ -270,8 +265,13 @@ Internet-Draft                   SkyDNS                     January 2014
    "web2.example.com" on port 5441.  The callback itself will be a HTTP
    DELETE, with the name of the service as the JSON payload:
 
-
-
+   {
+     "Name":"TestService"
+     "Environment":"Production"
+     "Region":"Test"
+     "Version":"1.0.0"
+     "Host":"web1.example.com"
+   }
 
 
 
@@ -281,14 +281,6 @@ Ketelsen, et al.          Expires July 25, 2014                 [Page 5]
 
 Internet-Draft                   SkyDNS                     January 2014
 
-
-   {
-     "Name":"TestService"
-     "Environment":"Production"
-     "Region":"Test"
-     "Version":"1.0.0"
-     "Host":"web1.example.com"
-   }
 
    TODO(miek): failed callback registration, deleting callbacks (not
    supported).
@@ -328,16 +320,6 @@ Internet-Draft                   SkyDNS                     January 2014
 
    TODO
 
-
-
-
-
-
-Ketelsen, et al.          Expires July 25, 2014                 [Page 6]
-
-Internet-Draft                   SkyDNS                     January 2014
-
-
 7.  References
 
    [Golang]   "The Go Programming Language", 2011.
@@ -348,6 +330,14 @@ Internet-Draft                   SkyDNS                     January 2014
    [Raft]     Ongaro, D. and J. Ousterhout, "In Search of an
               Understandable Consensus Algorithm", October 2013.
 
+
+
+
+Ketelsen, et al.          Expires July 25, 2014                 [Page 6]
+
+Internet-Draft                   SkyDNS                     January 2014
+
+
    [SkyDNS-git]
               Martin, E., Ketelsen, B., Gieben, R., Carey, C., and C.
               Crosby, "SkyDNS Git repository", 2012.
@@ -356,7 +346,111 @@ Internet-Draft                   SkyDNS                     January 2014
 
    [1] http://blog.gopheracademy.com/skydns
 
-Appendix A.  License
+Appendix A.  Examples
+
+   In this document we used the "skydnsctl" command line utility to
+   query SkyDNS, but as SkyDNS is using of the shelve protcols (HTTP and
+   DNS) you can basically use whatever tool you like.  Even the standard
+   resolving library in libc will suffice.
+
+   For instance, registering a service with "curl":
+
+curl -X PUT -L http://localhost:8080/skydns/services/1001 -d \
+     '{"Name":"TestService", "Version":"1.0.0","Environment":"Production",
+      "Region":"East","Host":"web1.site.com","Port":80,"TTL":4000}'
+
+   And then looking up services with "dig".
+
+   All service in the production environment:
+
+       dig @localhost production.skydns.local SRV
+
+   Which will result in:
+
+   ;; ANSWER SECTION:
+   production.skydns.local.  3979 IN SRV 10 20 80 web1.site.com.
+
+   TODO from here:
+
+   All TestService v1.0.0 Instances in Production Environment "dig
+   @localhost 1-0-0.testservice.production.skydns.local SRV"
+
+;; QUESTION SECTION:
+;1-0-0.testservice.production.skydns.local. IN  SRV
+
+;; ANSWER SECTION:
+1-0-0.testservice.production.skydns.local. 600  IN  SRV 10 20 80   web1.site.com.
+1-0-0.testservice.production.skydns.local. 3950 IN  SRV 10 20 8080 web2.site.com.
+1-0-0.testservice.production.skydns.local. 3600 IN  SRV 10 20 9000 server24.
+1-0-0.testservice.production.skydns.local. 3956 IN  SRV 10 20 80   web3.site.com.
+1-0-0.testservice.production.skydns.local. 3961 IN  SRV 10 20 80   web4.site.com.
+
+
+
+
+
+Ketelsen, et al.          Expires July 25, 2014                 [Page 7]
+
+Internet-Draft                   SkyDNS                     January 2014
+
+
+   All TestService Instances at any version, within the East region "dig
+   @localhost east.*.testservice.production.skydns.local SRV"
+
+   This is where we've changed things up a bit, notice we used the "*"
+   wildcard for version so we get any version, and because we've
+   supplied an explicit region that we're looking for we get that as the
+   highest DNS priority, with the weight being distributed evenly, then
+   all of our West instances still show up for fail-over, but with a
+   higher Priority.
+
+;; QUESTION SECTION:
+;east.*.testservice.production.skydns.local. IN SRV
+
+;; ANSWER SECTION:
+east.*.testservice.production.skydns.local. 531  IN SRV 10 50 80   web1.site.com.
+east.*.testservice.production.skydns.local. 3881 IN SRV 10 50 8080 web2.site.com.
+east.*.testservice.production.skydns.local. 3531 IN SRV 20 33 9000 server24.
+east.*.testservice.production.skydns.local. 3887 IN SRV 20 33 80   web3.site.com.
+east.*.testservice.production.skydns.local. 3892 IN SRV 20 33 80   web4.site.com.
+
+   A Records To return A records, simply run a normal DNS query for a
+   service matching the above patterns.
+
+   Let's add some web servers to SkyDNS:
+
+curl -X PUT -L http://localhost:8080/skydns/services/1011 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.10","Port":80,"TTL":400000}'
+curl -X PUT -L http://localhost:8080/skydns/services/1012 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.11","Port":80,"TTL":400000}'
+curl -X PUT -L http://localhost:8080/skydns/services/1013 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.12","Port":80,"TTL":400000}'
+curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.13","Port":80,"TTL":400000}'
+
+   Now do a normal DNS query: "dig rails.production.skydns.local"
+
+   ;; QUESTION SECTION:
+   ;rails.production.skydns.local. IN  A
+
+   ;; ANSWER SECTION:
+   rails.production.skydns.local. 399918 IN A  127.0.0.10
+   rails.production.skydns.local. 399918 IN A  127.0.0.11
+   rails.production.skydns.local. 399918 IN A  127.0.0.12
+   rails.production.skydns.local. 399919 IN A  127.0.0.13
+
+   Now you have a list of all known IP Addresses registered running the
+   "rails" service name.  Because we're returning A records and not SRV
+   records, there are no ports listed, so this is only useful when
+   you're querying for services running on ports known to you in
+   advance.  Notice, we didn't specify version or region, but we could
+   have.
+
+
+
+
+Ketelsen, et al.          Expires July 25, 2014                 [Page 8]
+
+Internet-Draft                   SkyDNS                     January 2014
+
+
+Appendix B.  License
 
    The MIT License (MIT)
 
@@ -381,146 +475,6 @@ Appendix A.  License
    ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-
-
-
-
-
-
-
-Ketelsen, et al.          Expires July 25, 2014                 [Page 7]
-
-Internet-Draft                   SkyDNS                     January 2014
-
-
-A.1.  Examples
-
-   Let's take a look at some results.  First we need to add a few
-   services so we have services to query against.
-
-// Service 1001 (East Region)
-curl -X PUT -L http://localhost:8080/skydns/services/1001 -d '{"Name":"TestService","Version":"1.0.0","Environment":"Production","Region":"East","Host":"web1.site.com","Port":80,"TTL":4000}'
-
-// Service 1002 (East Region)
-curl -X PUT -L http://localhost:8080/skydns/services/1002 -d '{"Name":"TestService","Version":"1.0.0","Environment":"Production","Region":"East","Host":"web2.site.com","Port":8080,"TTL":4000}'
-
-// Service 1003 (West Region)
-curl -X PUT -L http://localhost:8080/skydns/services/1003 -d '{"Name":"TestService","Version":"1.0.0","Environment":"Production","Region":"West","Host":"web3.site.com","Port":80,"TTL":4000}'
-
-// Service 1004 (West Region)
-curl -X PUT -L http://localhost:8080/skydns/services/1004 -d '{"Name":"TestService","Version":"1.0.0","Environment":"Production","Region":"West","Host":"web4.site.com","Port":80,"TTL":4000}'
-
-   Now we can try some of our example DNS lookups: #####All services in
-   the Production Environment "dig @localhost production.skydns.local
-   SRV"
-
-;; QUESTION SECTION:
-;production.skydns.local.           IN  SRV
-
-;; ANSWER SECTION:
-production.skydns.local.        629     IN  SRV 10 20 80   web1.site.com.
-production.skydns.local.        3979    IN  SRV 10 20 8080 web2.site.com.
-production.skydns.local.        3629    IN  SRV 10 20 9000 server24.
-production.skydns.local.        3985    IN  SRV 10 20 80   web3.site.com.
-production.skydns.local.        3990    IN  SRV 10 20 80   web4.site.com.
-
-A.1.1.  All TestService instances in Production Environment
-
-   "dig @localhost testservice.production.skydns.local SRV"
-
-;; QUESTION SECTION:
-;testservice.production.skydns.local.       IN  SRV
-
-;; ANSWER SECTION:
-testservice.production.skydns.local.    615     IN  SRV 10 20 80   web1.site.com.
-testservice.production.skydns.local.    3966    IN  SRV 10 20 8080 web2.site.com.
-testservice.production.skydns.local.    3615    IN  SRV 10 20 9000 server24.
-testservice.production.skydns.local.    3972    IN  SRV 10 20 80   web3.site.com.
-testservice.production.skydns.local.    3976    IN  SRV 10 20 80   web4.site.com.
-
-
-
-
-
-
-
-Ketelsen, et al.          Expires July 25, 2014                 [Page 8]
-
-Internet-Draft                   SkyDNS                     January 2014
-
-
-A.1.2.  All TestService v1.0.0 Instances in Production Environment
-
-   "dig @localhost 1-0-0.testservice.production.skydns.local SRV"
-
-;; QUESTION SECTION:
-;1-0-0.testservice.production.skydns.local. IN  SRV
-
-;; ANSWER SECTION:
-1-0-0.testservice.production.skydns.local. 600  IN  SRV 10 20 80   web1.site.com.
-1-0-0.testservice.production.skydns.local. 3950 IN  SRV 10 20 8080 web2.site.com.
-1-0-0.testservice.production.skydns.local. 3600 IN  SRV 10 20 9000 server24.
-1-0-0.testservice.production.skydns.local. 3956 IN  SRV 10 20 80   web3.site.com.
-1-0-0.testservice.production.skydns.local. 3961 IN  SRV 10 20 80   web4.site.com.
-
-A.1.3.  All TestService Instances at any version, within the East region
-
-   "dig @localhost east.*.testservice.production.skydns.local SRV"
-
-   This is where we've changed things up a bit, notice we used the "*"
-   wildcard for version so we get any version, and because we've
-   supplied an explicit region that we're looking for we get that as the
-   highest DNS priority, with the weight being distributed evenly, then
-   all of our West instances still show up for fail-over, but with a
-   higher Priority.
-
-;; QUESTION SECTION:
-;east.*.testservice.production.skydns.local. IN SRV
-
-;; ANSWER SECTION:
-east.*.testservice.production.skydns.local. 531  IN SRV 10 50 80   web1.site.com.
-east.*.testservice.production.skydns.local. 3881 IN SRV 10 50 8080 web2.site.com.
-east.*.testservice.production.skydns.local. 3531 IN SRV 20 33 9000 server24.
-east.*.testservice.production.skydns.local. 3887 IN SRV 20 33 80   web3.site.com.
-east.*.testservice.production.skydns.local. 3892 IN SRV 20 33 80   web4.site.com.
-
-A.1.4.  A Records
-
-   To return A records, simply run a normal DNS query for a service
-   matching the above patterns.
-
-   Let's add some web servers to SkyDNS:
-
-curl -X PUT -L http://localhost:8080/skydns/services/1011 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.10","Port":80,"TTL":400000}'
-curl -X PUT -L http://localhost:8080/skydns/services/1012 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.11","Port":80,"TTL":400000}'
-curl -X PUT -L http://localhost:8080/skydns/services/1013 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.12","Port":80,"TTL":400000}'
-curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.13","Port":80,"TTL":400000}'
-
-   Now do a normal DNS query: "dig rails.production.skydns.local"
-
-
-
-Ketelsen, et al.          Expires July 25, 2014                 [Page 9]
-
-Internet-Draft                   SkyDNS                     January 2014
-
-
-   ;; QUESTION SECTION:
-   ;rails.production.skydns.local. IN  A
-
-   ;; ANSWER SECTION:
-   rails.production.skydns.local. 399918 IN A  127.0.0.10
-   rails.production.skydns.local. 399918 IN A  127.0.0.11
-   rails.production.skydns.local. 399918 IN A  127.0.0.12
-   rails.production.skydns.local. 399919 IN A  127.0.0.13
-
-   Now you have a list of all known IP Addresses registered running the
-   "rails" service name.  Because we're returning A records and not SRV
-   records, there are no ports listed, so this is only useful when
-   you're querying for services running on ports known to you in
-   advance.  Notice, we didn't specify version or region, but we could
-   have.
 
 Authors' Addresses
 
@@ -547,14 +501,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-Ketelsen, et al.          Expires July 25, 2014                [Page 10]
+Ketelsen, et al.          Expires July 25, 2014                 [Page 9]
