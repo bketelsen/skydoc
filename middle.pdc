@@ -54,11 +54,24 @@ is expunged from SkyDNS.
 
 # Service Management
 
-#
+When interacting with a service
+JSON
+
+## Registration
+
+## Removal
+
+## Keep alive
+
+## Callbacks
 
 TODO
 
 # Service Discovery
+
+## DNS
+
+## HTTP
 
 TODO
 
