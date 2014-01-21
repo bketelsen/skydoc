@@ -2,7 +2,7 @@
 <reference anchor='SkyDNS-git'>
 <front>
 
-<title>SkyDNS Git repository.</title>
+<title>SkyDNS Git repository</title>
 <author initials='E.' surname='Martin' fullname='Erik St. Martin'> <organization/> </author>
 <author initials='B.' surname='Ketelsen' fullname='Brian Ketelsen '> <organization/> </author>
 <author initials='R.' surname='Gieben' fullname='R. (Miek) Gieben'> <organization/> </author>

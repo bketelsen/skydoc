@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<reference anchor='Golang'>
+<front>
+
+<title>The Go Programming Language</title>
+<author initials='' surname='' fullname='Go Authors'> <organization /> </author>
+<date year='2011' /> <!-- year is probably wrong -->
+</front>
+<format type='WEB' target='https://golang.org/' />
+</reference>

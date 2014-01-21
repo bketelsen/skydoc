@@ -4,7 +4,7 @@ SkyDNS
 ([Announcement Blog Post](http://blog.gopheracademy.com/skydns))
 is a distributed service for announcement and discovery of services. It
 leverages Raft ([](#Raft)) for high-availability and consensus, and utilizes DNS queries
-to discover available services. This is done by leveraging SRV records in DNS,
+to discover available services. This is done by using SRV records in DNS,
 with special meaning given to subdomains, priorities and weights.
 
 SkyDNS will also act as a forwarding DNS proxy, so that you can set your SkyDNS
@@ -16,7 +16,8 @@ connect to your service, SkyDNS will also return A records. This is useful if
 you already know what port a particular service is using, and you just want a
 list of IP addresses with known running instances.
 
-The development of SkyDNS takes place on Github ([](#SkyDNS-git)). 
+The development of SkyDNS takes place on Github ([](#SkyDNS-git)). SkyDNS is written
+in the Go language ([](#Golang).
 
 # Services
 
@@ -46,7 +47,7 @@ Host:
 
 A service name will use these components in a fixed order:
 
-    <Host> <Version> <Region> <Name> <Environment>
+    "Host" "Version" "Region" "Name" "Environment"
     
 
 
@@ -57,6 +58,18 @@ TODO
 # Service Discovery
 
 TODO
+
+# Implementation
+
+The current implementation of SkyDNS ([](#SkyDNS-git), consists out of server and a client
+library. This client library is used in a command line tool `skydnsctl` which allows for
+easy registration and querying of SkyDNS.
+
+
+# Security Considerationso
+
+TODO
+
 
 <!--
 
