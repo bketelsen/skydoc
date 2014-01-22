@@ -17,7 +17,7 @@ you already know what port a particular service is using, and you just want a
 list of IP addresses with known running instances.
 
 The development of SkyDNS takes place on Github ([](#SkyDNS-git)). SkyDNS is written
-in the Go language ([](#Golang)). It is licenced under the MIT License, see []#(License).
+in the Go language ([](#Golang)). It is licenced under the MIT License, see [](#license).
 
 # Services
 
