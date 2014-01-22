@@ -21,12 +21,12 @@ Table of Contents
      3.3.  Deregistration  . . . . . . . . . . . . . . . . . . . . .   4
      3.4.  Call backs  . . . . . . . . . . . . . . . . . . . . . . .   4
    4.  DNS Service Discovery . . . . . . . . . . . . . . . . . . . .   5
-     4.1.  Wildcards . . . . . . . . . . . . . . . . . . . . . . . .   6
+     4.1.  Wildcards . . . . . . . . . . . . . . . . . . . . . . . .   5
      4.2.  Record Types  . . . . . . . . . . . . . . . . . . . . . .   6
    5.  HTTP Service Discovery  . . . . . . . . . . . . . . . . . . .   6
    6.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   6
-     6.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   7
-   7.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     6.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   6
+   7.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   6
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .   0
@@ -116,16 +116,15 @@ Ketelsen, et al.                                                [Page 2]
 
    2.  "/skydns/callbacks/UUID", used for callback management.
 
-   The UUID (TODO: REF) is generated _by the client_ and used the
-   identifer for the service.  Each request MUST carry a JSON [RFC4627]
+   The UUID (TODO: REF 4122) is generated _by the client_ and used the
+   identifier for the service.  Each request MUST carry a JSON [RFC4627]
    payload with is defined in the sections below.
 
-   SkyDNS also supports a shared secret which is used for
-   authoritzation.
+   SkyDNS also supports a shared secret which is used for authorization.
 
 3.1.  Registration
 
-   Whe registring a service a client generates an UUID (denoted $UUID
+   When registering a service a client generates an UUID (denoted $UUID
    here) and makes a HTTP PUT request to `/skydns/services/$UUID` with
    the following JSON payload:
 
@@ -160,8 +159,9 @@ Ketelsen, et al.                                                [Page 2]
    live for the number of seconds supplied in your TTL (10 seconds in
    our example), unless you send a heartbeat to update the TTL.
 
-
-
+   Note that instead of a hostname you can also use an IP address (IPv4
+   or IPV6), in that case SkyDNS will make up an hostname:
+   "$UUID.skydns.local".
 
 
 
@@ -170,17 +170,13 @@ Ketelsen, et al.                                                [Page 3]
                                  SkyDNS                     January 2014
 
 
-   Note that instead of a hostname you can also use an IP address (IPv4
-   or IPV6), in that case SkyDNS will make up an hostname:
-   "$UUID.skydns.local".
-
-   _Not specifing all the elements, sane defaults?_
+   TODO(miek): Not specifying all the elements, sane defaults?
 
 3.2.  Heartbeat
 
    SkyDNS requires that services submit an HTTP request to update their
    TTL within the TTL they last supplied.  If a service fails to do so
-   within this timeframe SkyDNS will expire the service automatically.
+   within this time frame SkyDNS will expire the service automatically.
    This will allow for nodes to fail and DNS to reflect this quickly
    (also see Section 3.4).
 
@@ -217,6 +213,10 @@ Ketelsen, et al.                                                [Page 3]
      Figure 3: JSON payload definition when registring a callback with
                                   SkyDNS.
 
+   First the service for which this callback is added is named.  Then
+   the call back return address is specified:
+
+   Reply:  Reply back to this address.
 
 
 
@@ -225,11 +225,6 @@ Ketelsen, et al.                                                [Page 4]
 
                                  SkyDNS                     January 2014
 
-
-   First the service for which this callback is added is named.  Then
-   the call back return address is specified:
-
-   Reply:  Reply back to this address.
 
    Port:  Reply back to this port.
 
@@ -258,22 +253,27 @@ Ketelsen, et al.                                                [Page 4]
    are more generic, than the subdomains to their left.  This allows for
    you to supply only the positions you care about:
 
-   +------------------------------+------------------------------------+
-   | Elements in the Request      | Result                             |
-   +------------------------------+------------------------------------+
-   | Host Version Region Name     | A specific host                    |
-   | Environment                  |                                    |
-   | Version Region Name          | All hosts, disregarding the host   |
-   | Environment                  | name                               |
-   | Region Name Environment      | All hosts in this region           |
-   | Name Environment             | All hosts that share this name and |
-   |                              | environment                        |
-   | Environment                  | All hosts in this environment      |
-   +------------------------------+------------------------------------+
+   +-------------------------------+-----------------------------------+
+   | Elements in the Request       | Result                            |
+   +-------------------------------+-----------------------------------+
+   | Host Version Region Name      | A specific host                   |
+   | Environment                   |                                   |
+   | Version Region Name           | All hosts, disregarding the       |
+   | Environment                   | hostname                          |
+   | Region Name Environment       | All hosts in this region          |
+   | Name Environment              | All hosts in this this name and   |
+   |                               | environment                       |
+   | Environment                   | All hosts in this environment     |
+   +-------------------------------+-----------------------------------+
 
              Table 1: Making requests less and less specific.
 
+4.1.  Wildcards
 
+   In addition to leaving elements out, it is something convenient to
+   leave out names "in the middle".  This is supported in SkyDNS by
+   means of wildcards.  The wildcard character is "*" (without the
+   quotes).  The wildcard can be places anywhere in a service name,
 
 
 
@@ -282,12 +282,6 @@ Ketelsen, et al.                                                [Page 5]
                                  SkyDNS                     January 2014
 
 
-4.1.  Wildcards
-
-   In addition to leaving elements out, it is something convenient to
-   leave out names "in the middle".  This is supported in SkyDNS by
-   means of wildcards.  The wildcard character is "*" (without the
-   quotes).  The wildcard can be places anywhere in a service name,
    making that element match anything.  Note the following two service
    names are equivalent.
 
@@ -302,21 +296,6 @@ Ketelsen, et al.                                                [Page 5]
    Services can be found by querying SkyDNS via any DNS client or
    utility.
 
-   o  east._._.production.skydns.local - Would return all services in
-      the East region, that are a part of the production environment.
-
-   o  authservice.production.skydns.local - For instance would return
-      all services with the name AuthService in the production
-      environment, regardless of the Version, Region, or Host
-
-   o  1-0-0.authservice.production.skydns.local - Is the same as above
-      but restricting it to only version 1.0.0
-
-   o  east.1-0-0.authservice.production.skydns.local - Would add the
-      restriction that the services must be running in the East region
-
-   A AAAA SRV records queries
-
 5.  HTTP Service Discovery
 
    Currently you may only retrieve a service's info by UUID of the
@@ -329,14 +308,6 @@ Ketelsen, et al.                                                [Page 5]
    server and a client library.  This client library is also used in a
    command line tool "skydnsctl" which allows for easy registration and
    querying of SkyDNS.
-
-
-
-
-Ketelsen, et al.                                                [Page 6]
-
-                                 SkyDNS                     January 2014
-
 
 6.1.  DNS Forwarding
 
@@ -358,16 +329,46 @@ Ketelsen, et al.                                                [Page 6]
    SkyDNS is running on port 8080 on localhost for HTTP and on port 1053
    for DNS.  For "skydnsctl" we use an environment variable:
 
+
+
+
+
+Ketelsen, et al.                                                [Page 6]
+
+                                 SkyDNS                     January 2014
+
+
    export SKYDNS=http://localhost:8080
    export SKYDNS_DNSPORT=1053
 
    The following services will be added:
 
-       +--------------+----------+---------+-------+--------------+
-       | Host         | Version  | Region  | Name  | Environment  |
-       +--------------+----------+---------+-------+--------------+
-       | testservice  | <        |         |       |              |
-       +--------------+----------+---------+-------+--------------+
+    +---------------------+----------+---------+-------+--------------+
+    | Host                | Version  | Region  | Name  | Environment  |
+    +---------------------+----------+---------+-------+--------------+
+    | web1.example.com.   | 1.0.0    | east    | web   | production   |
+    | web2.example.com.   | 1.0.0    | west    | web   | production   |
+    | web3.example.com.   | 1.0.1    | east    | web   | testing      |
+    +---------------------+----------+---------+-------+--------------+
+
+   All running on port 8008 and initially with a TTL of 100 seconds.  We
+   used the open source tool "uuidgen" (TODO:REF) for generation the
+   UUID.
+
+% skydnsctl add $(uuidgen) \
+'{"Name":"web","Environment":"production","Region":"east","Version":"1.0.0","Host":"web1.example.com",
+  "Port":8008,"TTL":100}'
+e68a2880-5367-423d-9fd8-e665bffcb426 added to skydns
+
+% skydnsctl add $(uuidgen) \
+'{"Name":"web","Environment":"production","Region":"east","Version":"1.0.0","Host":"web1.example.com",
+  "Port":8008,"TTL":100}'
+e68a2880-5367-423d-9fd8-e665bffcb426 added to skydns
+
+% skydnsctl add $(uuidgen) \
+'{"Name":"web","Environment":"production","Region":"east","Version":"1.0.0","Host":"web1.example.com",
+  "Port":8008,"TTL":100}'
+e68a2880-5367-423d-9fd8-e665bffcb426 added to skydns
 
 8.  Security Considerations
 
@@ -384,7 +385,6 @@ Ketelsen, et al.                                                [Page 6]
 
    [Raft]     Ongaro, D. and J. Ousterhout, "In Search of an
               Understandable Consensus Algorithm", October 2013.
-
 
 
 

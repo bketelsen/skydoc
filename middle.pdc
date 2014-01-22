@@ -61,14 +61,14 @@ SkyDNS exposes a RESTful (TODO: REF) interface. There are two entry points:
 1. `/skydns/services/UUID`, used for service management.
 1. `/skydns/callbacks/UUID`, used for callback management.
 
-The UUID (TODO: REF) is generated *by the client* and used the identifer for the service.
+The UUID (TODO: REF 4122) is generated *by the client* and used the identifier for the service.
 Each request MUST carry a JSON [](#RFC4627) payload with is defined in the sections below.
 
-SkyDNS also supports a shared secret which is used for authoritzation.
+SkyDNS also supports a shared secret which is used for authorization.
 
 ## Registration
 
-Whe registring a service a client generates an UUID (denoted $UUID here) and makes a HTTP PUT request to
+When registering a service a client generates an UUID (denoted $UUID here) and makes a HTTP PUT request to
 `/skydns/services/$UUID` with the following JSON payload:
 
     { 
@@ -105,11 +105,11 @@ heartbeat to update the TTL.
 Note that instead of a hostname you can also use an IP address (IPv4 or IPV6),
 in that case SkyDNS will make up an hostname: `$UUID.skydns.local`. 
 
-*Not specifing all the elements, sane defaults?*
+TODO(miek): Not specifying all the elements, sane defaults?
 
 ## Heartbeat
 SkyDNS requires that services submit an HTTP request to update their TTL within
-the TTL they last supplied. If a service fails to do so within this timeframe
+the TTL they last supplied. If a service fails to do so within this time frame
 SkyDNS will expire the service automatically. This will allow for nodes to fail
 and DNS to reflect this quickly (also see [](#call-backs)).
 
@@ -176,9 +176,9 @@ This allows for you to supply only the positions you care about:
 Elements in the Request               Result
 -----------------------               --------
 Host Version Region Name Environment  A specific host 
-Version Region Name Environment       All hosts, disregarding the host name
+Version Region Name Environment       All hosts, disregarding the hostname
 Region Name Environment               All hosts in this region
-Name Environment                      All hosts that share this name and environment
+Name Environment                      All hosts in this this name and environment
 Environment                           All hosts in this environment
 
 ^[tab:leavingout::Making requests less and less specific.]
@@ -199,6 +199,7 @@ SRV records respectively.
 
 Services can be found by querying SkyDNS via any DNS client or utility. 
 
+<!--
 - east.*.*.production.skydns.local - Would return all services in the East region, that are a part of the production environment.
 
 - authservice.production.skydns.local - For instance would return all services with the name AuthService in the production environment, regardless of the Version, Region, or Host
@@ -206,6 +207,7 @@ Services can be found by querying SkyDNS via any DNS client or utility.
 - east.1-0-0.authservice.production.skydns.local - Would add the restriction that the services must be running in the East region
 
 A AAAA SRV records queries
+-->
 
 # HTTP Service Discovery 
 Currently you may only retrieve a service's info by UUID of the service, in the
@@ -237,9 +239,32 @@ on localhost for HTTP and on port 1053 for DNS. For `skydnsctl` we use an enviro
 
 The following services will be added:
 
-Host         Version    Region   Name  Environment
-----         --------   -------  ----  -----------
-testservice  <
+Host              Version    Region   Name   Environment
+----              --------   -------  ----   -----------
+web1.example.com.  1.0.0      east     web   production
+web2.example.com.  1.0.0      west     web   production
+web3.example.com.  1.0.1      east     web   testing
+
+All running on port 8008 and initially with a TTL of 100 seconds. We used the open source tool
+`uuidgen` (TODO:REF) for generation the UUID.
+
+    % skydnsctl add $(uuidgen) \
+    '{"Name":"web","Environment":"production","Region":"east","Version":"1.0.0",
+      "Host":"web1.example.com","Port":8008,"TTL":100}' 
+    e68a2880-5367-423d-9fd8-e665bffcb426 added to skydns
+
+    % skydnsctl add $(uuidgen) \
+    '{"Name":"web","Environment":"production","Region":"west","Version":"1.0.0",
+      "Host":"web2.example.com","Port":8008,"TTL":100}'
+    4f890a83-9704-424f-aa41-d120185cb427 added to skydns
+
+    % skydnsctl add $(uuidgen) \
+    '{"Name":"web","Environment":"testing","Region":"east","Version":"1.0.1",
+      "Host":"web3.example.com","Port":8008,"TTL":100}'
+    cc5aeaa5-02a5-4d44-91d8-cec4f950af2e
+
+With `skydnsctl -json` we can list all services (in JSON format) that are now registered in 
+SkyDNS.
 
 
 # Security Considerations
