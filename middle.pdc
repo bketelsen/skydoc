@@ -105,6 +105,8 @@ heartbeat to update the TTL.
 Note that instead of a hostname you can also use an IP address (IPv4 or IPV6),
 in that case SkyDNS will make up an hostname: `$UUID.skydns.local`. 
 
+*Not specifing all the elements, sane defaults?*
+
 ## Heartbeat
 SkyDNS requires that services submit an HTTP request to update their TTL within
 the TTL they last supplied. If a service fails to do so within this timeframe
@@ -224,6 +226,21 @@ When provided with more than one nameserver SkyDNS will round robin between the 
 
 > Please test this before relying on it in production, as there may be edge cases
 > that don't work as planned.
+
+# Examples
+
+Below we will add and query for services in SkyDNS. It is assumed SkyDNS is running on port 8080
+on localhost for HTTP and on port 1053 for DNS. For `skydnsctl` we use an environment variable:
+
+    export SKYDNS=http://localhost:8080
+    export SKYDNS_DNSPORT=1053
+
+The following services will be added:
+
+Host         Version    Region   Name  Environment
+----         --------   -------  ----  -----------
+testservice  <
+
 
 # Security Considerations
 

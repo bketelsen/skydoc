@@ -21,17 +21,19 @@ Table of Contents
      3.3.  Deregistration  . . . . . . . . . . . . . . . . . . . . .   4
      3.4.  Call backs  . . . . . . . . . . . . . . . . . . . . . . .   4
    4.  DNS Service Discovery . . . . . . . . . . . . . . . . . . . .   5
-     4.1.  Wildcards . . . . . . . . . . . . . . . . . . . . . . . .   5
+     4.1.  Wildcards . . . . . . . . . . . . . . . . . . . . . . . .   6
+     4.2.  Record Types  . . . . . . . . . . . . . . . . . . . . . .   6
    5.  HTTP Service Discovery  . . . . . . . . . . . . . . . . . . .   6
    6.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   6
-     6.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   6
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   0
-     8.2.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   7
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   7
-   Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .   9
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
+     6.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   7
+   7.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   7
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .   0
+     9.2.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   8
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   8
+   Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .  10
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
 
 1.  SkyDNS
 
@@ -47,9 +49,7 @@ Table of Contents
    and SkyDNS will forward and proxy requests for which it is not
    authoritative.
 
-   Besides serving SRV records, which include _all_ the information you
-   need to connect to your service, SkyDNS will also return A records.
-   This is useful if you already know what port a particular service is
+
 
 
 
@@ -58,6 +58,9 @@ Ketelsen, et al.                                                [Page 1]
                                  SkyDNS                     January 2014
 
 
+   Besides serving SRV records, which include _all_ the information you
+   need to connect to your service, SkyDNS will also return A records.
+   This is useful if you already know what port a particular service is
    using, and you just want a list of IP addresses with known running
    instances.
 
@@ -104,15 +107,14 @@ Ketelsen, et al.                                                [Page 1]
 
    1.  "/skydns/services/UUID", used for service management.
 
-   2.  "/skydns/callbacks/UUID", used for callback management.
-
-
 
 
 Ketelsen, et al.                                                [Page 2]
 
                                  SkyDNS                     January 2014
 
+
+   2.  "/skydns/callbacks/UUID", used for callback management.
 
    The UUID (TODO: REF) is generated _by the client_ and used the
    identifer for the service.  Each request MUST carry a JSON [RFC4627]
@@ -158,9 +160,7 @@ Ketelsen, et al.                                                [Page 2]
    live for the number of seconds supplied in your TTL (10 seconds in
    our example), unless you send a heartbeat to update the TTL.
 
-   Note that instead of a hostname you can also use an IP address (IPv4
-   or IPV6), in that case SkyDNS will make up an hostname:
-   "$UUID.skydns.local".
+
 
 
 
@@ -169,6 +169,12 @@ Ketelsen, et al.                                                [Page 3]
 
                                  SkyDNS                     January 2014
 
+
+   Note that instead of a hostname you can also use an IP address (IPv4
+   or IPV6), in that case SkyDNS will make up an hostname:
+   "$UUID.skydns.local".
+
+   _Not specifing all the elements, sane defaults?_
 
 3.2.  Heartbeat
 
@@ -211,12 +217,6 @@ Ketelsen, et al.                                                [Page 3]
      Figure 3: JSON payload definition when registring a callback with
                                   SkyDNS.
 
-   First the service for which this callback is added is named.  Then
-   the call back return address is specified:
-
-   Reply:  Reply back to this address.
-
-   Port:  Reply back to this port.
 
 
 
@@ -225,6 +225,13 @@ Ketelsen, et al.                                                [Page 4]
 
                                  SkyDNS                     January 2014
 
+
+   First the service for which this callback is added is named.  Then
+   the call back return address is specified:
+
+   Reply:  Reply back to this address.
+
+   Port:  Reply back to this port.
 
    Thus in this case it will result in the call back being sent to
    "web2.example.com" on port 5441.  The callback itself will be a HTTP
@@ -266,6 +273,15 @@ Ketelsen, et al.                                                [Page 4]
 
              Table 1: Making requests less and less specific.
 
+
+
+
+
+Ketelsen, et al.                                                [Page 5]
+
+                                 SkyDNS                     January 2014
+
+
 4.1.  Wildcards
 
    In addition to leaving elements out, it is something convenient to
@@ -275,15 +291,13 @@ Ketelsen, et al.                                                [Page 4]
    making that element match anything.  Note the following two service
    names are equivalent.
 
-
-
-Ketelsen, et al.                                                [Page 5]
-
-                                 SkyDNS                     January 2014
-
-
    Host Version Region Name Environment
      *  Version Region Name Environment
+
+4.2.  Record Types
+
+   You can query SkyDNS for IPv4 addresses, IPv6 addresses and server
+   records, A, AAAA and SRV records respectively.
 
    Services can be found by querying SkyDNS via any DNS client or
    utility.
@@ -316,6 +330,14 @@ Ketelsen, et al.                                                [Page 5]
    command line tool "skydnsctl" which allows for easy registration and
    querying of SkyDNS.
 
+
+
+
+Ketelsen, et al.                                                [Page 6]
+
+                                 SkyDNS                     January 2014
+
+
 6.1.  DNS Forwarding
 
    By specifying nameservers on the "skydns" command line, you create a
@@ -330,21 +352,30 @@ Ketelsen, et al.                                                [Page 5]
       Please test this before relying on it in production, as there may
       be edge cases that don't work as planned.
 
+7.  Examples
 
+   Below we will add and query for services in SkyDNS.  It is assumed
+   SkyDNS is running on port 8080 on localhost for HTTP and on port 1053
+   for DNS.  For "skydnsctl" we use an environment variable:
 
+   export SKYDNS=http://localhost:8080
+   export SKYDNS_DNSPORT=1053
 
-Ketelsen, et al.                                                [Page 6]
-
-                                 SkyDNS                     January 2014
+   The following services will be added:
 
+       +--------------+----------+---------+-------+--------------+
+       | Host         | Version  | Region  | Name  | Environment  |
+       +--------------+----------+---------+-------+--------------+
+       | testservice  | <        |         |       |              |
+       +--------------+----------+---------+-------+--------------+
 
-7.  Security Considerations
+8.  Security Considerations
 
    Security depends very much on the randomness of the generated UUIDs
 
    TODO(miek)
 
-8.  References
+9.  References
 
    [Golang]   "The Go Programming Language", 2011.
 
@@ -354,11 +385,20 @@ Ketelsen, et al.                                                [Page 6]
    [Raft]     Ongaro, D. and J. Ousterhout, "In Search of an
               Understandable Consensus Algorithm", October 2013.
 
+
+
+
+
+Ketelsen, et al.                                                [Page 7]
+
+                                 SkyDNS                     January 2014
+
+
    [SkyDNS-git]
               Martin, E., Ketelsen, B., Gieben, R., Carey, C., and C.
               Crosby, "SkyDNS Git repository", 2012.
 
-8.2.  URIs
+9.2.  URIs
 
    [1] http://blog.gopheracademy.com/skydns
 
@@ -386,14 +426,6 @@ Appendix A.  Examples
    ;; ANSWER SECTION:
    production.skydns.local.  3979 IN SRV 10 20 80 web1.site.com.
 
-
-
-
-Ketelsen, et al.                                                [Page 7]
-
-                                 SkyDNS                     January 2014
-
-
    TODO from here:
 
    All TestService v1.0.0 Instances in Production Environment "dig
@@ -408,6 +440,15 @@ Ketelsen, et al.                                                [Page 7]
 1-0-0.testservice.production.skydns.local. 3600 IN  SRV 10 20 9000 server24.
 1-0-0.testservice.production.skydns.local. 3956 IN  SRV 10 20 80   web3.site.com.
 1-0-0.testservice.production.skydns.local. 3961 IN  SRV 10 20 80   web4.site.com.
+
+
+
+
+
+Ketelsen, et al.                                                [Page 8]
+
+                                 SkyDNS                     January 2014
+
 
    All TestService Instances at any version, within the East region "dig
    @localhost east.*.testservice.production.skydns.local SRV"
@@ -441,15 +482,6 @@ curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","V
 
    Now do a normal DNS query: "dig rails.production.skydns.local"
 
-
-
-
-
-Ketelsen, et al.                                                [Page 8]
-
-                                 SkyDNS                     January 2014
-
-
    ;; QUESTION SECTION:
    ;rails.production.skydns.local. IN  A
 
@@ -465,6 +497,14 @@ Ketelsen, et al.                                                [Page 8]
    you're querying for services running on ports known to you in
    advance.  Notice, we didn't specify version or region, but we could
    have.
+
+
+
+
+Ketelsen, et al.                                                [Page 9]
+
+                                 SkyDNS                     January 2014
+
 
 Appendix B.  License
 
@@ -499,13 +539,6 @@ Authors' Addresses
    Email: bketelsen@gmail.com
 
 
-
-
-Ketelsen, et al.                                                [Page 9]
-
-                                 SkyDNS                     January 2014
-
-
    Erik St. Martin
 
    Email: alakriti@gmail.com
@@ -515,39 +548,6 @@ Ketelsen, et al.                                                [Page 9]
 
    Email: miek@miek.nl
    URI:   http://miek.nl
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
