@@ -356,19 +356,22 @@ Ketelsen, et al.                                                [Page 6]
    UUID.
 
 % skydnsctl add $(uuidgen) \
-'{"Name":"web","Environment":"production","Region":"east","Version":"1.0.0","Host":"web1.example.com",
-  "Port":8008,"TTL":100}'
+'{"Name":"web","Environment":"production","Region":"east","Version":"1.0.0",
+  "Host":"web1.example.com","Port":8008,"TTL":100}'
 e68a2880-5367-423d-9fd8-e665bffcb426 added to skydns
 
 % skydnsctl add $(uuidgen) \
-'{"Name":"web","Environment":"production","Region":"east","Version":"1.0.0","Host":"web1.example.com",
-  "Port":8008,"TTL":100}'
-e68a2880-5367-423d-9fd8-e665bffcb426 added to skydns
+'{"Name":"web","Environment":"production","Region":"west","Version":"1.0.0",
+  "Host":"web2.example.com","Port":8008,"TTL":100}'
+4f890a83-9704-424f-aa41-d120185cb427 added to skydns
 
 % skydnsctl add $(uuidgen) \
-'{"Name":"web","Environment":"production","Region":"east","Version":"1.0.0","Host":"web1.example.com",
-  "Port":8008,"TTL":100}'
-e68a2880-5367-423d-9fd8-e665bffcb426 added to skydns
+'{"Name":"web","Environment":"testing","Region":"east","Version":"1.0.1",
+  "Host":"web3.example.com","Port":8008,"TTL":100}'
+cc5aeaa5-02a5-4d44-91d8-cec4f950af2e
+
+   With "skydnsctl -json" we can list all services (in JSON format) that
+   are now registered in SkyDNS.
 
 8.  Security Considerations
 
@@ -383,9 +386,6 @@ e68a2880-5367-423d-9fd8-e665bffcb426 added to skydns
    [RFC4627]  Crockford, D., "The application/json Media Type for
               JavaScript Object Notation (JSON)", RFC 4627, July 2006.
 
-   [Raft]     Ongaro, D. and J. Ousterhout, "In Search of an
-              Understandable Consensus Algorithm", October 2013.
-
 
 
 
@@ -393,6 +393,9 @@ Ketelsen, et al.                                                [Page 7]
 
                                  SkyDNS                     January 2014
 
+
+   [Raft]     Ongaro, D. and J. Ousterhout, "In Search of an
+              Understandable Consensus Algorithm", October 2013.
 
    [SkyDNS-git]
               Martin, E., Ketelsen, B., Gieben, R., Carey, C., and C.
@@ -431,15 +434,12 @@ Appendix A.  Examples
    All TestService v1.0.0 Instances in Production Environment "dig
    @localhost 1-0-0.testservice.production.skydns.local SRV"
 
-;; QUESTION SECTION:
-;1-0-0.testservice.production.skydns.local. IN  SRV
 
-;; ANSWER SECTION:
-1-0-0.testservice.production.skydns.local. 600  IN  SRV 10 20 80   web1.site.com.
-1-0-0.testservice.production.skydns.local. 3950 IN  SRV 10 20 8080 web2.site.com.
-1-0-0.testservice.production.skydns.local. 3600 IN  SRV 10 20 9000 server24.
-1-0-0.testservice.production.skydns.local. 3956 IN  SRV 10 20 80   web3.site.com.
-1-0-0.testservice.production.skydns.local. 3961 IN  SRV 10 20 80   web4.site.com.
+
+
+
+
+
 
 
 
@@ -449,6 +449,16 @@ Ketelsen, et al.                                                [Page 8]
 
                                  SkyDNS                     January 2014
 
+
+;; QUESTION SECTION:
+;1-0-0.testservice.production.skydns.local. IN  SRV
+
+;; ANSWER SECTION:
+1-0-0.testservice.production.skydns.local. 600  IN  SRV 10 20 80   web1.site.com.
+1-0-0.testservice.production.skydns.local. 3950 IN  SRV 10 20 8080 web2.site.com.
+1-0-0.testservice.production.skydns.local. 3600 IN  SRV 10 20 9000 server24.
+1-0-0.testservice.production.skydns.local. 3956 IN  SRV 10 20 80   web3.site.com.
+1-0-0.testservice.production.skydns.local. 3961 IN  SRV 10 20 80   web4.site.com.
 
    All TestService Instances at any version, within the East region "dig
    @localhost east.*.testservice.production.skydns.local SRV"
@@ -482,6 +492,20 @@ curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","V
 
    Now do a normal DNS query: "dig rails.production.skydns.local"
 
+
+
+
+
+
+
+
+
+
+Ketelsen, et al.                                                [Page 9]
+
+                                 SkyDNS                     January 2014
+
+
    ;; QUESTION SECTION:
    ;rails.production.skydns.local. IN  A
 
@@ -497,14 +521,6 @@ curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","V
    you're querying for services running on ports known to you in
    advance.  Notice, we didn't specify version or region, but we could
    have.
-
-
-
-
-Ketelsen, et al.                                                [Page 9]
-
-                                 SkyDNS                     January 2014
-
 
 Appendix B.  License
 
@@ -539,6 +555,13 @@ Authors' Addresses
    Email: bketelsen@gmail.com
 
 
+
+
+Ketelsen, et al.                                               [Page 10]
+
+                                 SkyDNS                     January 2014
+
+
    Erik St. Martin
 
    Email: alakriti@gmail.com
@@ -557,4 +580,37 @@ Authors' Addresses
 
 
 
-Ketelsen, et al.                                               [Page 10]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ketelsen, et al.                                               [Page 11]
