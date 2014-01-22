@@ -191,6 +191,10 @@ names are equivalent.
     Host Version Region Name Environment
       *  Version Region Name Environment
 
+## Record Types
+You can query SkyDNS for IPv4 addresses, IPv6 addresses and server records, A, AAAA and
+SRV records respectively.
+
 Services can be found by querying SkyDNS via any DNS client or utility. 
 
 - east.*.*.production.skydns.local - Would return all services in the East region, that are a part of the production environment.

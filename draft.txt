@@ -371,9 +371,9 @@ Appendix A.  Examples
 
    For instance, registering a service with "curl":
 
-curl -X PUT -L http://localhost:8080/skydns/services/1001 -d \
-     '{"Name":"TestService", "Version":"1.0.0","Environment":"Production",
-      "Region":"East","Host":"web1.site.com","Port":80,"TTL":4000}'
+   curl -X PUT -L http://localhost:8080/skydns/services/1001 -d \
+   '{"Name":"TestService", "Version":"1.0.0","Environment":"Production",
+   "Region":"East","Host":"web1.site.com","Port":80,"TTL":4000}'
 
    And then looking up services with "dig".
 
