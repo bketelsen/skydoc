@@ -53,7 +53,7 @@ Table of Contents
 
 
 
-Ketelsen, et al.          Expires July 26, 2014                 [Page 1]
+Ketelsen, et al.                                                [Page 1]
 
                                  SkyDNS                     January 2014
 
@@ -109,7 +109,7 @@ Ketelsen, et al.          Expires July 26, 2014                 [Page 1]
 
 
 
-Ketelsen, et al.          Expires July 26, 2014                 [Page 2]
+Ketelsen, et al.                                                [Page 2]
 
                                  SkyDNS                     January 2014
 
@@ -165,7 +165,7 @@ Ketelsen, et al.          Expires July 26, 2014                 [Page 2]
 
 
 
-Ketelsen, et al.          Expires July 26, 2014                 [Page 3]
+Ketelsen, et al.                                                [Page 3]
 
                                  SkyDNS                     January 2014
 
@@ -221,7 +221,7 @@ Ketelsen, et al.          Expires July 26, 2014                 [Page 3]
 
 
 
-Ketelsen, et al.          Expires July 26, 2014                 [Page 4]
+Ketelsen, et al.                                                [Page 4]
 
                                  SkyDNS                     January 2014
 
@@ -277,7 +277,7 @@ Ketelsen, et al.          Expires July 26, 2014                 [Page 4]
 
 
 
-Ketelsen, et al.          Expires July 26, 2014                 [Page 5]
+Ketelsen, et al.                                                [Page 5]
 
                                  SkyDNS                     January 2014
 
@@ -333,7 +333,7 @@ curl -X PUT -L http://localhost:8080/skydns/services/1001 -d \
 
 
 
-Ketelsen, et al.          Expires July 26, 2014                 [Page 6]
+Ketelsen, et al.                                                [Page 6]
 
                                  SkyDNS                     January 2014
 
@@ -389,7 +389,7 @@ curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","V
 
 
 
-Ketelsen, et al.          Expires July 26, 2014                 [Page 7]
+Ketelsen, et al.                                                [Page 7]
 
                                  SkyDNS                     January 2014
 
@@ -445,7 +445,7 @@ Authors' Addresses
 
 
 
-Ketelsen, et al.          Expires July 26, 2014                 [Page 8]
+Ketelsen, et al.                                                [Page 8]
 
                                  SkyDNS                     January 2014
 
@@ -501,4 +501,4 @@ Ketelsen, et al.          Expires July 26, 2014                 [Page 8]
 
 
 
-Ketelsen, et al.          Expires July 26, 2014                 [Page 9]
+Ketelsen, et al.                                                [Page 9]
