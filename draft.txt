@@ -20,18 +20,18 @@ Table of Contents
      3.2.  Heartbeat . . . . . . . . . . . . . . . . . . . . . . . .   4
      3.3.  Deregistration  . . . . . . . . . . . . . . . . . . . . .   4
      3.4.  Call backs  . . . . . . . . . . . . . . . . . . . . . . .   4
-   4.  Service Discovery . . . . . . . . . . . . . . . . . . . . . .   5
-     4.1.  DNS . . . . . . . . . . . . . . . . . . . . . . . . . . .   5
-     4.2.  HTTP  . . . . . . . . . . . . . . . . . . . . . . . . . .   5
-   5.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   5
-     5.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   5
-   6.  Security Considerationso  . . . . . . . . . . . . . . . . . .   6
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   0
-     7.2.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   6
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   6
-   Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .   8
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
+   4.  DNS Service Discovery . . . . . . . . . . . . . . . . . . . .   5
+     4.1.  Wildcards . . . . . . . . . . . . . . . . . . . . . . . .   5
+   5.  HTTP Service Discovery  . . . . . . . . . . . . . . . . . . .   6
+   6.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   6
+     6.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   6
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   0
+     8.2.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   7
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   7
+   Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .   9
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
 
 1.  SkyDNS
 
@@ -83,13 +83,16 @@ Ketelsen, et al.                                                [Page 1]
    Region:  Where do these hosts live, e.g. "east", "west" or even
       "test".
 
-   Version:  A version string, e.g. "1.0.1".
+   Version:  A version string, e.g. "1.0.1".  Note that any dots in this
+      string are converted to hyphens: "-".
 
    Host:  The hostname of a machine running the service.
 
    A service name will use these components in a fixed order:
 
    "Host" "Version" "Region" "Name" "Environment"
+
+             Figure 1: A fully qualified SkyDNS service name.
 
    Each registered service has a time to live (TTL).  When the TTL
    expires the services is expunged from SkyDNS.
@@ -103,9 +106,6 @@ Ketelsen, et al.                                                [Page 1]
 
    2.  "/skydns/callbacks/UUID", used for callback management.
 
-   The UUID (TODO: REF) is generated _by the client_ and used the
-   identifer for the service.  Each request MUST carry a JSON [RFC4627]
-   payload with is defined in the sections below.
 
 
 
@@ -113,6 +113,10 @@ Ketelsen, et al.                                                [Page 2]
 
                                  SkyDNS                     January 2014
 
+
+   The UUID (TODO: REF) is generated _by the client_ and used the
+   identifer for the service.  Each request MUST carry a JSON [RFC4627]
+   payload with is defined in the sections below.
 
    SkyDNS also supports a shared secret which is used for
    authoritzation.
@@ -133,7 +137,7 @@ Ketelsen, et al.                                                [Page 2]
      "TTL":10
    }
 
-     Figure 1: JSON payload definition when registring a service with
+     Figure 2: JSON payload definition when registring a service with
                                   SkyDNS.
 
    Note: the are new elements here:
@@ -157,10 +161,6 @@ Ketelsen, et al.                                                [Page 2]
    Note that instead of a hostname you can also use an IP address (IPv4
    or IPV6), in that case SkyDNS will make up an hostname:
    "$UUID.skydns.local".
-
-
-
-
 
 
 
@@ -208,7 +208,7 @@ Ketelsen, et al.                                                [Page 3]
      "Port":5441
    }
 
-     Figure 2: JSON payload definition when registring a callback with
+     Figure 3: JSON payload definition when registring a callback with
                                   SkyDNS.
 
    First the service for which this callback is added is named.  Then
@@ -241,27 +241,87 @@ Ketelsen, et al.                                                [Page 4]
    TODO(miek): failed callback registration, deleting callbacks (not
    supported).
 
-4.  Service Discovery
+4.  DNS Service Discovery
 
-4.1.  DNS
+   SkyDNS exports the services via HTTP and DNS.  When using the DNS for
+   service discovery even unchanged clients can be used.  Queries to
+   SkyDNS can contain wildcards or leave parts of the service name out.
+   Recall the elements of a service name from Figure 1.  The domain
+   syntax when querying follows a pattern where the right most positions
+   are more generic, than the subdomains to their left.  This allows for
+   you to supply only the positions you care about:
 
-4.2.  HTTP
+   +------------------------------+------------------------------------+
+   | Elements in the Request      | Result                             |
+   +------------------------------+------------------------------------+
+   | Host Version Region Name     | A specific host                    |
+   | Environment                  |                                    |
+   | Version Region Name          | All hosts, disregarding the host   |
+   | Environment                  | name                               |
+   | Region Name Environment      | All hosts in this region           |
+   | Name Environment             | All hosts that share this name and |
+   |                              | environment                        |
+   | Environment                  | All hosts in this environment      |
+   +------------------------------+------------------------------------+
 
-   TODO
+             Table 1: Making requests less and less specific.
 
-5.  Implementation
+4.1.  Wildcards
+
+   In addition to leaving elements out, it is something convenient to
+   leave out names "in the middle".  This is supported in SkyDNS by
+   means of wildcards.  The wildcard character is "*" (without the
+   quotes).  The wildcard can be places anywhere in a service name,
+   making that element match anything.  Note the following two service
+   names are equivalent.
+
+
+
+Ketelsen, et al.                                                [Page 5]
+
+                                 SkyDNS                     January 2014
+
+
+   Host Version Region Name Environment
+     *  Version Region Name Environment
+
+   Services can be found by querying SkyDNS via any DNS client or
+   utility.
+
+   o  east._._.production.skydns.local - Would return all services in
+      the East region, that are a part of the production environment.
+
+   o  authservice.production.skydns.local - For instance would return
+      all services with the name AuthService in the production
+      environment, regardless of the Version, Region, or Host
+
+   o  1-0-0.authservice.production.skydns.local - Is the same as above
+      but restricting it to only version 1.0.0
+
+   o  east.1-0-0.authservice.production.skydns.local - Would add the
+      restriction that the services must be running in the East region
+
+   A AAAA SRV records queries
+
+5.  HTTP Service Discovery
+
+   Currently you may only retrieve a service's info by UUID of the
+   service, in the future we may implement querying of the services
+   similar to the DNS interface.
+
+6.  Implementation
 
    The current implementation of SkyDNS ([SkyDNS-git], consists out of
-   server and a client library.  This client library is used in a
+   server and a client library.  This client library is also used in a
    command line tool "skydnsctl" which allows for easy registration and
    querying of SkyDNS.
 
-5.1.  DNS Forwarding
+6.1.  DNS Forwarding
 
-   By specifying nameserver on the "skydns" command line, you create a
+   By specifying nameservers on the "skydns" command line, you create a
    DNS forwarding proxy.  Requests for which SkyDNS isn't authoritative
-   will be forwarded and proxied back to the client.  This means that
-   you can set SkyDNS as the primary DNS server and use it for both
+   for will be forwarded and proxied back to the client.  This means
+   that you can set SkyDNS as the primary DNS server and use it for both
    service discovery and normal DNS operations.
 
    When provided with more than one nameserver SkyDNS will round robin
@@ -273,22 +333,18 @@ Ketelsen, et al.                                                [Page 4]
 
 
 
-
-
-
-
-Ketelsen, et al.                                                [Page 5]
+Ketelsen, et al.                                                [Page 6]
 
                                  SkyDNS                     January 2014
 
 
-6.  Security Considerationso
+7.  Security Considerations
 
    Security depends very much on the randomness of the generated UUIDs
 
-   TODO
+   TODO(miek)
 
-7.  References
+8.  References
 
    [Golang]   "The Go Programming Language", 2011.
 
@@ -302,7 +358,7 @@ Ketelsen, et al.                                                [Page 5]
               Martin, E., Ketelsen, B., Gieben, R., Carey, C., and C.
               Crosby, "SkyDNS Git repository", 2012.
 
-7.2.  URIs
+8.2.  URIs
 
    [1] http://blog.gopheracademy.com/skydns
 
@@ -333,7 +389,7 @@ curl -X PUT -L http://localhost:8080/skydns/services/1001 -d \
 
 
 
-Ketelsen, et al.                                                [Page 6]
+Ketelsen, et al.                                                [Page 7]
 
                                  SkyDNS                     January 2014
 
@@ -389,7 +445,7 @@ curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","V
 
 
 
-Ketelsen, et al.                                                [Page 7]
+Ketelsen, et al.                                                [Page 8]
 
                                  SkyDNS                     January 2014
 
@@ -445,7 +501,7 @@ Authors' Addresses
 
 
 
-Ketelsen, et al.                                                [Page 8]
+Ketelsen, et al.                                                [Page 9]
 
                                  SkyDNS                     January 2014
 
@@ -501,4 +557,4 @@ Ketelsen, et al.                                                [Page 8]
 
 
 
-Ketelsen, et al.                                                [Page 9]
+Ketelsen, et al.                                               [Page 10]
