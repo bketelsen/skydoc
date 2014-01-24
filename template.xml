@@ -18,6 +18,7 @@
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
 <?rfc private="yes"?>
+<?rfc header="Technical Note"?>
 <?rfc topblock="no"?>
  <front>
         <title abbrev="SkyDNS">SkyDNS: Distributed Service Discovery</title>
