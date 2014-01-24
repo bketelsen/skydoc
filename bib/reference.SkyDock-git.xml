@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<reference anchor='SkyDock-git'>
+<front>
+
+<title>SkyDock Git repository</title>
+<author initials='C.' surname='Crosby' fullname='Michael Crosby'> <organization/> </author>
+<date year='2014' />
+
+</front>
+<format type='GIT' target='https://github.com/crosbymichael/skydock' />
+</reference>

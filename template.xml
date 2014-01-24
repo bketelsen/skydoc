@@ -4,10 +4,11 @@
 <!ENTITY pandocMiddle   PUBLIC '' 'middle.xml'>
 <!ENTITY pandocBack     PUBLIC '' 'back.xml'>
 
-<!ENTITY Golang      PUBLIC '' 'bib/reference.Golang.xml'>
-<!ENTITY Raft        PUBLIC '' 'bib/reference.Raft.xml'>
-<!ENTITY RFC4627     PUBLIC '' 'bib/reference.RFC.4627.xml'>
-<!ENTITY SkyDNS-git  PUBLIC '' 'bib/reference.SkyDNS-git.xml'>
+<!ENTITY Golang       PUBLIC '' 'bib/reference.Golang.xml'>
+<!ENTITY Raft         PUBLIC '' 'bib/reference.Raft.xml'>
+<!ENTITY RFC4627      PUBLIC '' 'bib/reference.RFC.4627.xml'>
+<!ENTITY SkyDNS-git   PUBLIC '' 'bib/reference.SkyDNS-git.xml'>
+<!ENTITY SkyDock-git  PUBLIC '' 'bib/reference.SkyDock-git.xml'>
 ]>
 
 <rfc ipr="trust200902" category="std" docName="">
@@ -67,10 +68,9 @@
         &RFC4627;
         &SkyDNS-git;
     </references>
-    <!--
     <references title="Informative References">
+        &SkyDock-git;
     </references>
-    -->
     &pandocBack;
 </back>
 </rfc>

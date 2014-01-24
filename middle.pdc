@@ -16,8 +16,8 @@ connect to your service, SkyDNS will also return A records. This is useful if
 you already know what port a particular service is using, and you just want a
 list of IP addresses with known running instances.
 
-The development of SkyDNS takes place on Github ([](#SkyDNS-git)). SkyDNS is written
-in the Go language ([](#Golang)). It is licenced under the MIT License, see [](#license).
+The development of SkyDNS takes place on Github [](#SkyDNS-git). SkyDNS is written
+in the Go language [](#Golang). It is licenced under the MIT License, see [](#license).
 
 # Services
 
@@ -173,15 +173,16 @@ The domain syntax when querying follows a pattern where the right
 most positions are more generic, than the subdomains to their left.
 This allows for you to supply only the positions you care about:
 
-Elements in the Request               Result
------------------------               --------
-Host Version Region Name Environment  A specific host 
-Version Region Name Environment       All hosts, disregarding the hostname
-Region Name Environment               All hosts in this region
-Name Environment                      All hosts in this this name and environment
-Environment                           All hosts in this environment
+Elements in the Request     Result
+-----------------------     --------
+H. V. R. N. E.              A specific host 
+V. R. N. E.                 All hosts, disregarding the hostname
+R. N. E.                    All hosts in this region
+N. E.                       All hosts in this environment/name
+E.                          All hosts in this environment
 
-^[tab:leavingout::Making requests less and less specific.]
+^[tab:leavingout::Making requests less and less specific. In this table the following abbreviations
+are used: H. is Host, V. is Version, R. is Region, N. is Name and E. is for Environment.]
 
 ## Wildcards
 In addition to leaving elements out, it is something convenient to leave out names
@@ -192,6 +193,8 @@ names are equivalent.
 
     Host Version Region Name Environment
       *  Version Region Name Environment
+
+TODO(miek): more examples.
 
 ## Record Types
 You can query SkyDNS for IPv4 addresses, IPv6 addresses and server records, A, AAAA and
@@ -266,9 +269,16 @@ All running on port 8008 and initially with a TTL of 100 seconds. We used the op
 With `skydnsctl -json` we can list all services (in JSON format) that are now registered in 
 SkyDNS.
 
-
 # Security Considerations
 
 Security depends very much on the randomness of the generated UUIDs
 
 TODO(miek)
+
+# Projects Using SkyDNS
+
+Skydock:
+:   Skydoc [](#SkyDock-git) works with Docker (TODO:ref) containers. Skydock monitors docker 
+    events when containers start, 
+    stop, die, get killed, etc and inserts records into SkyDNS. 
+    This allows standard DNS queries to discover services running inside (other) docker containers. 

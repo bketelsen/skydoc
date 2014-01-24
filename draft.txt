@@ -10,30 +10,72 @@ Abstract
    services.  It leverages Raft for high-availability and consensus, and
    utilizes DNS queries to discover available services.
 
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on July 28, 2014.
+
+Copyright Notice
+
+   Copyright (c) 2014 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
 Table of Contents
 
-   1.  SkyDNS  . . . . . . . . . . . . . . . . . . . . . . . . . . .   1
+   1.  SkyDNS  . . . . . . . . . . . . . . . . . . . . . . . . . . .   2
    2.  Services  . . . . . . . . . . . . . . . . . . . . . . . . . .   2
-     2.1.  Naming  . . . . . . . . . . . . . . . . . . . . . . . . .   2
-   3.  Service Management  . . . . . . . . . . . . . . . . . . . . .   2
-     3.1.  Registration  . . . . . . . . . . . . . . . . . . . . . .   3
+     2.1.  Naming  . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   3.  Service Management  . . . . . . . . . . . . . . . . . . . . .   3
+     3.1.  Registration  . . . . . . . . . . . . . . . . . . . . . .   4
      3.2.  Heartbeat . . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.3.  Deregistration  . . . . . . . . . . . . . . . . . . . . .   4
-     3.4.  Call backs  . . . . . . . . . . . . . . . . . . . . . . .   4
-   4.  DNS Service Discovery . . . . . . . . . . . . . . . . . . . .   5
-     4.1.  Wildcards . . . . . . . . . . . . . . . . . . . . . . . .   5
-     4.2.  Record Types  . . . . . . . . . . . . . . . . . . . . . .   6
-   5.  HTTP Service Discovery  . . . . . . . . . . . . . . . . . . .   6
-   6.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   6
-     6.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   6
-   7.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   6
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .   0
-     9.2.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   8
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   8
-   Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .  10
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
+
+
+
+Ketelsen, et al.          Expires July 28, 2014                 [Page 1]
+
+Internet-Draft                   SkyDNS                     January 2014
+
+
+     3.3.  Deregistration  . . . . . . . . . . . . . . . . . . . . .   5
+     3.4.  Call backs  . . . . . . . . . . . . . . . . . . . . . . .   5
+   4.  DNS Service Discovery . . . . . . . . . . . . . . . . . . . .   6
+     4.1.  Wildcards . . . . . . . . . . . . . . . . . . . . . . . .   6
+     4.2.  Record Types  . . . . . . . . . . . . . . . . . . . . . .   7
+   5.  HTTP Service Discovery  . . . . . . . . . . . . . . . . . . .   7
+   6.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   7
+     6.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   7
+   7.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   7
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+   9.  Projects Using SkyDNS . . . . . . . . . . . . . . . . . . . .   8
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .   9
+     10.2.  Informative References . . . . . . . . . . . . . . . . .   9
+     10.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .   9
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   9
+   Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .  11
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
 
 1.  SkyDNS
 
@@ -49,26 +91,28 @@ Table of Contents
    and SkyDNS will forward and proxy requests for which it is not
    authoritative.
 
-
-
-
-
-Ketelsen, et al.                                                [Page 1]
-
-                                 SkyDNS                     January 2014
-
-
    Besides serving SRV records, which include _all_ the information you
    need to connect to your service, SkyDNS will also return A records.
    This is useful if you already know what port a particular service is
    using, and you just want a list of IP addresses with known running
    instances.
 
-   The development of SkyDNS takes place on Github ([SkyDNS-git]).
-   SkyDNS is written in the Go language ([Golang]).  It is licenced
-   under the MIT License, see Appendix B.
+   The development of SkyDNS takes place on Github [SkyDNS-git].  SkyDNS
+   is written in the Go language [Golang].  It is licenced under the MIT
+   License, see Appendix B.
 
 2.  Services
+
+
+
+
+
+
+
+Ketelsen, et al.          Expires July 28, 2014                 [Page 2]
+
+Internet-Draft                   SkyDNS                     January 2014
+
 
 2.1.  Naming
 
@@ -107,13 +151,6 @@ Ketelsen, et al.                                                [Page 1]
 
    1.  "/skydns/services/UUID", used for service management.
 
-
-
-Ketelsen, et al.                                                [Page 2]
-
-                                 SkyDNS                     January 2014
-
-
    2.  "/skydns/callbacks/UUID", used for callback management.
 
    The UUID (TODO: REF 4122) is generated _by the client_ and used the
@@ -121,6 +158,17 @@ Ketelsen, et al.                                                [Page 2]
    payload with is defined in the sections below.
 
    SkyDNS also supports a shared secret which is used for authorization.
+
+
+
+
+
+
+
+Ketelsen, et al.          Expires July 28, 2014                 [Page 3]
+
+Internet-Draft                   SkyDNS                     January 2014
+
 
 3.1.  Registration
 
@@ -163,13 +211,6 @@ Ketelsen, et al.                                                [Page 2]
    or IPV6), in that case SkyDNS will make up an hostname:
    "$UUID.skydns.local".
 
-
-
-Ketelsen, et al.                                                [Page 3]
-
-                                 SkyDNS                     January 2014
-
-
    TODO(miek): Not specifying all the elements, sane defaults?
 
 3.2.  Heartbeat
@@ -177,6 +218,14 @@ Ketelsen, et al.                                                [Page 3]
    SkyDNS requires that services submit an HTTP request to update their
    TTL within the TTL they last supplied.  If a service fails to do so
    within this time frame SkyDNS will expire the service automatically.
+
+
+
+Ketelsen, et al.          Expires July 28, 2014                 [Page 4]
+
+Internet-Draft                   SkyDNS                     January 2014
+
+
    This will allow for nodes to fail and DNS to reflect this quickly
    (also see Section 3.4).
 
@@ -218,19 +267,20 @@ Ketelsen, et al.                                                [Page 3]
 
    Reply:  Reply back to this address.
 
-
-
-
-Ketelsen, et al.                                                [Page 4]
-
-                                 SkyDNS                     January 2014
-
-
    Port:  Reply back to this port.
 
    Thus in this case it will result in the call back being sent to
    "web2.example.com" on port 5441.  The callback itself will be a HTTP
    DELETE, with the name of the service as the JSON payload:
+
+
+
+
+
+Ketelsen, et al.          Expires July 28, 2014                 [Page 5]
+
+Internet-Draft                   SkyDNS                     January 2014
+
 
    {
      "Name":"TestService"
@@ -253,20 +303,19 @@ Ketelsen, et al.                                                [Page 4]
    are more generic, than the subdomains to their left.  This allows for
    you to supply only the positions you care about:
 
-   +-------------------------------+-----------------------------------+
-   | Elements in the Request       | Result                            |
-   +-------------------------------+-----------------------------------+
-   | Host Version Region Name      | A specific host                   |
-   | Environment                   |                                   |
-   | Version Region Name           | All hosts, disregarding the       |
-   | Environment                   | hostname                          |
-   | Region Name Environment       | All hosts in this region          |
-   | Name Environment              | All hosts in this this name and   |
-   |                               | environment                       |
-   | Environment                   | All hosts in this environment     |
-   +-------------------------------+-----------------------------------+
+   +--------------------------+---------------------------------------+
+   | Elements in the Request  | Result                                |
+   +--------------------------+---------------------------------------+
+   | H. V. R. N. E.           | A specific host                       |
+   | V. R. N. E.              | All hosts, disregarding the hostname  |
+   | R. N. E.                 | All hosts in this region              |
+   | N. E.                    | All hosts in this environment/name    |
+   | E.                       | All hosts in this environment         |
+   +--------------------------+---------------------------------------+
 
-             Table 1: Making requests less and less specific.
+    Table 1: Making requests less and less specific.  In this table the
+    following abbreviations are used: H. is Host, V. is Version, R. is
+               Region, N. is Name and E. is for Environment.
 
 4.1.  Wildcards
 
@@ -274,19 +323,20 @@ Ketelsen, et al.                                                [Page 4]
    leave out names "in the middle".  This is supported in SkyDNS by
    means of wildcards.  The wildcard character is "*" (without the
    quotes).  The wildcard can be places anywhere in a service name,
-
-
-
-Ketelsen, et al.                                                [Page 5]
-
-                                 SkyDNS                     January 2014
-
-
    making that element match anything.  Note the following two service
    names are equivalent.
 
    Host Version Region Name Environment
      *  Version Region Name Environment
+
+   TODO(miek): more examples.
+
+
+
+Ketelsen, et al.          Expires July 28, 2014                 [Page 6]
+
+Internet-Draft                   SkyDNS                     January 2014
+
 
 4.2.  Record Types
 
@@ -329,19 +379,20 @@ Ketelsen, et al.                                                [Page 5]
    SkyDNS is running on port 8080 on localhost for HTTP and on port 1053
    for DNS.  For "skydnsctl" we use an environment variable:
 
-
-
-
-
-Ketelsen, et al.                                                [Page 6]
-
-                                 SkyDNS                     January 2014
-
-
    export SKYDNS=http://localhost:8080
    export SKYDNS_DNSPORT=1053
 
    The following services will be added:
+
+
+
+
+
+
+Ketelsen, et al.          Expires July 28, 2014                 [Page 7]
+
+Internet-Draft                   SkyDNS                     January 2014
+
 
     +---------------------+----------+---------+-------+--------------+
     | Host                | Version  | Region  | Name  | Environment  |
@@ -379,20 +430,34 @@ cc5aeaa5-02a5-4d44-91d8-cec4f950af2e
 
    TODO(miek)
 
-9.  References
+9.  Projects Using SkyDNS
+
+   Skydock:  Skydoc [SkyDock-git] works with Docker (TODO:ref)
+      containers.  Skydock monitors docker events when containers start,
+      stop, die, get killed, etc and inserts records into SkyDNS.  This
+      allows standard DNS queries to discover services running inside
+      (other) docker containers.
+
+
+
+
+
+
+
+
+Ketelsen, et al.          Expires July 28, 2014                 [Page 8]
+
+Internet-Draft                   SkyDNS                     January 2014
+
+
+10.  References
+
+10.1.  Normative References
 
    [Golang]   "The Go Programming Language", 2011.
 
    [RFC4627]  Crockford, D., "The application/json Media Type for
               JavaScript Object Notation (JSON)", RFC 4627, July 2006.
-
-
-
-
-Ketelsen, et al.                                                [Page 7]
-
-                                 SkyDNS                     January 2014
-
 
    [Raft]     Ongaro, D. and J. Ousterhout, "In Search of an
               Understandable Consensus Algorithm", October 2013.
@@ -401,7 +466,12 @@ Ketelsen, et al.                                                [Page 7]
               Martin, E., Ketelsen, B., Gieben, R., Carey, C., and C.
               Crosby, "SkyDNS Git repository", 2012.
 
-9.2.  URIs
+10.2.  Informative References
+
+   [SkyDock-git]
+              Crosby, C., "SkyDock Git repository", 2014.
+
+10.3.  URIs
 
    [1] http://blog.gopheracademy.com/skydns
 
@@ -429,26 +499,17 @@ Appendix A.  Examples
    ;; ANSWER SECTION:
    production.skydns.local.  3979 IN SRV 10 20 80 web1.site.com.
 
+
+
+Ketelsen, et al.          Expires July 28, 2014                 [Page 9]
+
+Internet-Draft                   SkyDNS                     January 2014
+
+
    TODO from here:
 
    All TestService v1.0.0 Instances in Production Environment "dig
    @localhost 1-0-0.testservice.production.skydns.local SRV"
-
-
-
-
-
-
-
-
-
-
-
-
-Ketelsen, et al.                                                [Page 8]
-
-                                 SkyDNS                     January 2014
-
 
 ;; QUESTION SECTION:
 ;1-0-0.testservice.production.skydns.local. IN  SRV
@@ -496,14 +557,9 @@ curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","V
 
 
 
-
-
-
-
-
-Ketelsen, et al.                                                [Page 9]
+Ketelsen, et al.          Expires July 28, 2014                [Page 10]
 
-                                 SkyDNS                     January 2014
+Internet-Draft                   SkyDNS                     January 2014
 
 
    ;; QUESTION SECTION:
@@ -557,9 +613,9 @@ Authors' Addresses
 
 
 
-Ketelsen, et al.                                               [Page 10]
+Ketelsen, et al.          Expires July 28, 2014                [Page 11]
 
-                                 SkyDNS                     January 2014
+Internet-Draft                   SkyDNS                     January 2014
 
 
    Erik St. Martin
@@ -613,4 +669,4 @@ Ketelsen, et al.                                               [Page 10]
 
 
 
-Ketelsen, et al.                                               [Page 11]
+Ketelsen, et al.          Expires July 28, 2014                [Page 12]
