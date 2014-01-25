@@ -3,7 +3,7 @@
 SkyDNS 
 ([Announcement Blog Post](http://blog.gopheracademy.com/skydns))
 is a distributed service for announcement and discovery of services. It
-leverages Raft ([](#Raft)) for high-availability and consensus, and utilizes DNS queries
+leverages Raft [](#Raft) for high-availability and consensus, and utilizes DNS queries
 to discover available services. This is done by using SRV records in DNS,
 with special meaning given to subdomains, priorities and weights.
 
@@ -56,12 +56,12 @@ is expunged from SkyDNS.
 
 # Service Management
 
-SkyDNS exposes a RESTful (TODO: REF) interface. There are two entry points:
+SkyDNS exposes a RESTful [](#REST) interface. There are two entry points:
 
 1. `/skydns/services/UUID`, used for service management.
 1. `/skydns/callbacks/UUID`, used for callback management.
 
-The UUID (TODO: REF 4122) is generated *by the client* and used the identifier for the service.
+The UUID [](#RFC4122) is generated *by the client* and used as an unique identifier for the service.
 Each request MUST carry a JSON [](#RFC4627) payload with is defined in the sections below.
 
 SkyDNS also supports a shared secret which is used for authorization.

@@ -35,21 +35,21 @@ Table of Contents
      10.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .   8
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   8
    Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .  10
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
 
 1.  SkyDNS
 
    SkyDNS (Announcement Blog Post [1]) is a distributed service for
-   announcement and discovery of services.  It leverages Raft ([Raft])
-   for high-availability and consensus, and utilizes DNS queries to
-   discover available services.  This is done by using SRV records in
-   DNS, with special meaning given to subdomains, priorities and
-   weights.
+   announcement and discovery of services.  It leverages Raft [Raft] for
+   high-availability and consensus, and utilizes DNS queries to discover
+   available services.  This is done by using SRV records in DNS, with
+   special meaning given to subdomains, priorities and weights.
 
    SkyDNS will also act as a forwarding DNS proxy, so that you can set
    your SkyDNS instance as the primary DNS service in "/etc/resolv.conf"
    and SkyDNS will forward and proxy requests for which it is not
    authoritative.
+
 
 
 
@@ -102,7 +102,7 @@ Technical Note                   SkyDNS                     January 2014
 
 3.  Service Management
 
-   SkyDNS exposes a RESTful (TODO: REF) interface.  There are two entry
+   SkyDNS exposes a RESTful [REST] interface.  There are two entry
    points:
 
    1.  "/skydns/services/UUID", used for service management.
@@ -116,7 +116,7 @@ Technical Note                   SkyDNS                     January 2014
 
    2.  "/skydns/callbacks/UUID", used for callback management.
 
-   The UUID (TODO: REF 4122) is generated _by the client_ and used the
+   The UUID [RFC4122] is generated _by the client_ and used as an unique
    identifier for the service.  Each request MUST carry a JSON [RFC4627]
    payload with is defined in the sections below.
 
@@ -400,6 +400,13 @@ Technical Note                   SkyDNS                     January 2014
 
    [Golang]   "The Go Programming Language", 2011.
 
+   [REST]     Fielding, R., "Architectural Styles and the Design of
+              Network-based Software Architectures", 2000.
+
+   [RFC4122]  Leach, P., Mealling, M., and R. Salz, "A Universally
+              Unique IDentifier (UUID) URN Namespace", RFC 4122, July
+              2005.
+
    [RFC4627]  Crockford, D., "The application/json Media Type for
               JavaScript Object Notation (JSON)", RFC 4627, July 2006.
 
@@ -436,19 +443,19 @@ Appendix A.  Examples
 
    All service in the production environment:
 
-       dig @localhost production.skydns.local SRV
-
-   Which will result in:
-
-   ;; ANSWER SECTION:
-   production.skydns.local.  3979 IN SRV 10 20 80 web1.site.com.
-
 
 
 Ketelsen, et al.                                                [Page 8]
 
 Technical Note                   SkyDNS                     January 2014
 
+
+       dig @localhost production.skydns.local SRV
+
+   Which will result in:
+
+   ;; ANSWER SECTION:
+   production.skydns.local.  3979 IN SRV 10 20 80 web1.site.com.
 
    TODO from here:
 
@@ -490,13 +497,6 @@ east.*.testservice.production.skydns.local. 3892 IN SRV 20 33 80   web4.site.com
 
    Let's add some web servers to SkyDNS:
 
-curl -X PUT -L http://localhost:8080/skydns/services/1011 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.10","Port":80,"TTL":400000}'
-curl -X PUT -L http://localhost:8080/skydns/services/1012 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.11","Port":80,"TTL":400000}'
-curl -X PUT -L http://localhost:8080/skydns/services/1013 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.12","Port":80,"TTL":400000}'
-curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.13","Port":80,"TTL":400000}'
-
-   Now do a normal DNS query: "dig rails.production.skydns.local"
-
 
 
 
@@ -505,6 +505,13 @@ Ketelsen, et al.                                                [Page 9]
 
 Technical Note                   SkyDNS                     January 2014
 
+
+curl -X PUT -L http://localhost:8080/skydns/services/1011 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.10","Port":80,"TTL":400000}'
+curl -X PUT -L http://localhost:8080/skydns/services/1012 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.11","Port":80,"TTL":400000}'
+curl -X PUT -L http://localhost:8080/skydns/services/1013 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.12","Port":80,"TTL":400000}'
+curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.13","Port":80,"TTL":400000}'
+
+   Now do a normal DNS query: "dig rails.production.skydns.local"
 
    ;; QUESTION SECTION:
    ;rails.production.skydns.local. IN  A
@@ -548,18 +555,18 @@ Appendix B.  License
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 
-Authors' Addresses
-
-   Brian Ketelsen
-
-   Email: bketelsen@gmail.com
-
-
 
 
 Ketelsen, et al.                                               [Page 10]
 
 Technical Note                   SkyDNS                     January 2014
+
+
+Authors' Addresses
+
+   Brian Ketelsen
+
+   Email: bketelsen@gmail.com
 
 
    Erik St. Martin
@@ -571,13 +578,6 @@ Technical Note                   SkyDNS                     January 2014
 
    Email: miek@miek.nl
    URI:   http://miek.nl
-
-
-
-
-
-
-
 
 
 

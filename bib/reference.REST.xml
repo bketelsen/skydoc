@@ -1,0 +1,9 @@
+<reference anchor='REST'>
+        <front>
+        <title>Architectural Styles and the Design of Network-based Software Architectures</title>
+        <author initials='R. T.' surname='Fielding' fullname='Roy Thomas Fielding'>
+        <organization>University of California</organization>
+        </author>
+        <date year='2000'/>
+        </front>
+</reference>
