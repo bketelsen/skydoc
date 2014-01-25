@@ -8,6 +8,8 @@
 <!ENTITY Golang       PUBLIC '' 'bib/reference.Golang.xml'>
 <!ENTITY Raft         PUBLIC '' 'bib/reference.Raft.xml'>
 <!ENTITY REST         PUBLIC '' 'bib/reference.REST.xml'>
+<!ENTITY RFC1034      PUBLIC '' 'bib/reference.RFC.1034.xml'>
+<!ENTITY RFC1035      PUBLIC '' 'bib/reference.RFC.1035.xml'>
 <!ENTITY RFC4122      PUBLIC '' 'bib/reference.RFC.4122.xml'>
 <!ENTITY RFC4627      PUBLIC '' 'bib/reference.RFC.4627.xml'>
 <!ENTITY SkyDNS-git   PUBLIC '' 'bib/reference.SkyDNS-git.xml'>
@@ -70,6 +72,8 @@
         &Golang;
         &Raft;
         &REST;
+        &RFC1034;
+        &RFC1035;
         &RFC4122;
         &RFC4627;
         &SkyDNS-git;

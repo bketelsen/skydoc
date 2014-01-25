@@ -4,7 +4,7 @@ SkyDNS
 ([Announcement Blog Post](http://blog.gopheracademy.com/skydns))
 is a distributed service for announcement and discovery of services. It
 leverages Raft [](#Raft) for high-availability and consensus, and utilizes DNS queries
-to discover available services. This is done by using SRV records in DNS,
+[](#RFC1034) [](#RFC1035) to discover available services. This is done by using SRV records in DNS,
 with special meaning given to subdomains, priorities and weights.
 
 SkyDNS will also act as a forwarding DNS proxy, so that you can set your SkyDNS

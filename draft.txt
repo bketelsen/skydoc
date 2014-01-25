@@ -41,15 +41,15 @@ Table of Contents
 
    SkyDNS (Announcement Blog Post [1]) is a distributed service for
    announcement and discovery of services.  It leverages Raft [Raft] for
-   high-availability and consensus, and utilizes DNS queries to discover
-   available services.  This is done by using SRV records in DNS, with
-   special meaning given to subdomains, priorities and weights.
+   high-availability and consensus, and utilizes DNS queries [RFC1034]
+   [RFC1035] to discover available services.  This is done by using SRV
+   records in DNS, with special meaning given to subdomains, priorities
+   and weights.
 
    SkyDNS will also act as a forwarding DNS proxy, so that you can set
    your SkyDNS instance as the primary DNS service in "/etc/resolv.conf"
    and SkyDNS will forward and proxy requests for which it is not
    authoritative.
-
 
 
 
@@ -417,6 +417,12 @@ Technical Note 0x1               SkyDNS                     January 2014
    [REST]     Fielding, R., "Architectural Styles and the Design of
               Network-based Software Architectures", 2000.
 
+   [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
+              STD 13, RFC 1034, November 1987.
+
+   [RFC1035]  Mockapetris, P., "Domain names - implementation and
+              specification", STD 13, RFC 1035, November 1987.
+
    [RFC4122]  Leach, P., Mealling, M., and R. Salz, "A Universally
               Unique IDentifier (UUID) URN Namespace", RFC 4122, July
               2005.
@@ -436,12 +442,6 @@ Technical Note 0x1               SkyDNS                     January 2014
    [Docker]   "Docker: an open source project to pack, ship and run any
               application as a lightweight container", 2013.
 
-   [SkyDock-git]
-              Crosby, C., "SkyDock Git repository", 2014.
-
-
-
-
 
 
 
@@ -449,6 +449,9 @@ Ketelsen, et al.                                                [Page 8]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
+
+   [SkyDock-git]
+              Crosby, C., "SkyDock Git repository", 2014.
 
 10.3.  URIs
 
@@ -493,9 +496,6 @@ Appendix A.  Examples
 1-0-0.testservice.production.skydns.local. 3956 IN  SRV 10 20 80   web3.site.com.
 1-0-0.testservice.production.skydns.local. 3961 IN  SRV 10 20 80   web4.site.com.
 
-   All TestService Instances at any version, within the East region "dig
-   +noall +answer @localhost east.*.testservice.production.skydns.local
-   SRV"
 
 
 
@@ -505,6 +505,10 @@ Ketelsen, et al.                                                [Page 9]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
+
+   All TestService Instances at any version, within the East region "dig
+   +noall +answer @localhost east.*.testservice.production.skydns.local
+   SRV"
 
    This is where we've changed things up a bit, notice we used the "*"
    wildcard for version so we get any version, and because we've
@@ -550,10 +554,6 @@ Appendix B.  License
 
    Copyright (C) 2013 Erik St. Martin, Brian Ketelsen
 
-   Permission is hereby granted, free of charge, to any person obtaining
-   a copy of this software and associated documentation files (the
-   "Software"), to deal in the Software without restriction, including
-   without limitation the rights to use, copy, modify, merge, publish,
 
 
 
@@ -562,6 +562,10 @@ Ketelsen, et al.                                               [Page 10]
 Technical Note 0x1               SkyDNS                     January 2014
 
 
+   Permission is hereby granted, free of charge, to any person obtaining
+   a copy of this software and associated documentation files (the
+   "Software"), to deal in the Software without restriction, including
+   without limitation the rights to use, copy, modify, merge, publish,
    distribute, sublicense, and/or sell copies of the Software, and to
    permit persons to whom the Software is furnished to do so, subject to
    the following conditions:
@@ -594,10 +598,6 @@ Authors' Addresses
 
    Email: miek@miek.nl
    URI:   http://miek.nl
-
-
-
-
 
 
 
