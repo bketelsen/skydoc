@@ -494,10 +494,10 @@ Appendix A.  Examples
 1-0-0.testservice.production.skydns.local. 3961 IN  SRV 10 20 80   web4.site.com.
 
    All TestService Instances at any version, within the East region "dig
-   @localhost east.*.testservice.production.skydns.local SRV"
+   +noall +answer @localhost east.*.testservice.production.skydns.local
+   SRV"
 
-   This is where we've changed things up a bit, notice we used the "*"
-   wildcard for version so we get any version, and because we've
+
 
 
 
@@ -506,15 +506,13 @@ Ketelsen, et al.                                                [Page 9]
 Technical Note                   SkyDNS                     January 2014
 
 
+   This is where we've changed things up a bit, notice we used the "*"
+   wildcard for version so we get any version, and because we've
    supplied an explicit region that we're looking for we get that as the
    highest DNS priority, with the weight being distributed evenly, then
    all of our West instances still show up for fail-over, but with a
    higher Priority.
 
-;; QUESTION SECTION:
-;east.*.testservice.production.skydns.local. IN SRV
-
-;; ANSWER SECTION:
 east.*.testservice.production.skydns.local. 531  IN SRV 10 50 80   web1.site.com.
 east.*.testservice.production.skydns.local. 3881 IN SRV 10 50 8080 web2.site.com.
 east.*.testservice.production.skydns.local. 3531 IN SRV 20 33 9000 server24.
@@ -531,12 +529,9 @@ curl -X PUT -L http://localhost:8080/skydns/services/1012 -d '{"Name":"rails","V
 curl -X PUT -L http://localhost:8080/skydns/services/1013 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.12","Port":80,"TTL":400000}'
 curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.13","Port":80,"TTL":400000}'
 
-   Now do a normal DNS query: "dig rails.production.skydns.local"
+   Now do a normal DNS query: "dig +noall +answer
+   rails.production.skydns.local"
 
-   ;; QUESTION SECTION:
-   ;rails.production.skydns.local. IN  A
-
-   ;; ANSWER SECTION:
    rails.production.skydns.local. 399918 IN A  127.0.0.10
    rails.production.skydns.local. 399918 IN A  127.0.0.11
    rails.production.skydns.local. 399918 IN A  127.0.0.12
@@ -555,6 +550,11 @@ Appendix B.  License
 
    Copyright (C) 2013 Erik St. Martin, Brian Ketelsen
 
+   Permission is hereby granted, free of charge, to any person obtaining
+   a copy of this software and associated documentation files (the
+   "Software"), to deal in the Software without restriction, including
+   without limitation the rights to use, copy, modify, merge, publish,
+
 
 
 Ketelsen, et al.                                               [Page 10]
@@ -562,10 +562,6 @@ Ketelsen, et al.                                               [Page 10]
 Technical Note                   SkyDNS                     January 2014
 
 
-   Permission is hereby granted, free of charge, to any person obtaining
-   a copy of this software and associated documentation files (the
-   "Software"), to deal in the Software without restriction, including
-   without limitation the rights to use, copy, modify, merge, publish,
    distribute, sublicense, and/or sell copies of the Software, and to
    permit persons to whom the Software is furnished to do so, subject to
    the following conditions:
@@ -598,6 +594,10 @@ Authors' Addresses
 
    Email: miek@miek.nl
    URI:   http://miek.nl
+
+
+
+
 
 
 
