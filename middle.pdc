@@ -201,9 +201,7 @@ You can query SkyDNS for IPv4 addresses, IPv6 addresses and server records, A, A
 SRV records respectively.
 
 Services can be found by querying SkyDNS via any DNS client or utility or via the standard
-DNS resolving of the underlaying operating system.
-
-
+DNS resolution of the underlaying operating system.
 
 <!--
 - east.*.*.production.skydns.local - Would return all services in the East region, that are a part of the production environment.
@@ -284,7 +282,7 @@ TODO(miek)
 # Projects Using SkyDNS
 
 Skydock:
-:   Skydoc [](#SkyDock-git) works with Docker (TODO:ref) containers. Skydock monitors docker 
+:   Skydoc [](#SkyDock-git) works with Docker [](#Docker) containers. Skydock monitors docker 
     events when containers start, 
     stop, die, get killed, etc and inserts records into SkyDNS. 
     This allows standard DNS queries to discover services running inside (other) docker containers. 

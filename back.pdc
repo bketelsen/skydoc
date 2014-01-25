@@ -6,20 +6,20 @@ resolving library in libc will suffice.
 
 For instance, registering a service with `curl`:
 
-    curl -X PUT -L http://localhost:8080/skydns/services/1001 -d \
-    '{"Name":"TestService", "Version":"1.0.0","Environment":"Production",
-    "Region":"East","Host":"web1.site.com","Port":80,"TTL":4000}'
+    curl -X PUT -L http://localhost:8080/skydns/services/1001 \ 
+    -d '{"Name":"TestService", "Version":"1.0.0",
+         "Environment":"Production", "Region":"East",
+         "Host":"web1.site.com","Port":80,"TTL":4000}'
 
 And then looking up services with `dig`.
 
 All service in the production environment:
 
-        dig @localhost production.skydns.local SRV
+    dig +noall +answer @localhost production.skydns.local SRV
 
-Which will result in:
+Which will result in (note the TTL has counted down to 3979 second):
 
-	;; ANSWER SECTION:
-	production.skydns.local.  3979 IN SRV 10 20 80 web1.site.com.
+    production.skydns.local.  3979 IN SRV 10 20 80 web1.site.com.
 
 TODO from here:
 
@@ -37,7 +37,7 @@ TODO from here:
 	1-0-0.testservice.production.skydns.local. 3961 IN	SRV	10 20 80   web4.site.com.
 
  All TestService Instances at any version, within the East region
-`dig @localhost east.*.testservice.production.skydns.local SRV`
+`dig +noall +answer @localhost east.*.testservice.production.skydns.local SRV`
 
 This is where we've changed things up a bit, notice we used the "*" wildcard for
 version so we get any version, and because we've supplied an explicit region
@@ -45,10 +45,6 @@ that we're looking for we get that as the highest DNS priority, with the weight
 being distributed evenly, then all of our West instances still show up for
 fail-over, but with a higher Priority.
 
-	;; QUESTION SECTION:
-	;east.*.testservice.production.skydns.local. IN	SRV
-
-	;; ANSWER SECTION:
 	east.*.testservice.production.skydns.local. 531  IN SRV	10 50 80   web1.site.com.
 	east.*.testservice.production.skydns.local. 3881 IN SRV	10 50 8080 web2.site.com.
 	east.*.testservice.production.skydns.local. 3531 IN SRV	20 33 9000 server24.
@@ -67,12 +63,8 @@ Let's add some web servers to SkyDNS:
 	curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"West","Host":"127.0.0.13","Port":80,"TTL":400000}'
 
 Now do a normal DNS query:
-`dig rails.production.skydns.local`
+`dig +noall +answer rails.production.skydns.local`
 
-	;; QUESTION SECTION:
-	;rails.production.skydns.local.	IN	A
-
-	;; ANSWER SECTION:
 	rails.production.skydns.local. 399918 IN A	127.0.0.10
 	rails.production.skydns.local. 399918 IN A	127.0.0.11
 	rails.production.skydns.local. 399918 IN A	127.0.0.12

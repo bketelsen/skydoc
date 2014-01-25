@@ -32,7 +32,7 @@ Table of Contents
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
      10.1.  Normative References . . . . . . . . . . . . . . . . . .   8
      10.2.  Informative References . . . . . . . . . . . . . . . . .   8
-     10.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     10.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .   9
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   9
    Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .  10
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
@@ -302,7 +302,7 @@ Technical Note                   SkyDNS                     January 2014
    records, A, AAAA and SRV records respectively.
 
    Services can be found by querying SkyDNS via any DNS client or
-   utility or via the standard DNS resolving of the underlaying
+   utility or via the standard DNS resolution of the underlaying
    operating system.
 
 5.  HTTP Service Discovery
@@ -402,11 +402,11 @@ Technical Note                   SkyDNS                     January 2014
 
 9.  Projects Using SkyDNS
 
-   Skydock:  Skydoc [SkyDock-git] works with Docker (TODO:ref)
-      containers.  Skydock monitors docker events when containers start,
-      stop, die, get killed, etc and inserts records into SkyDNS.  This
-      allows standard DNS queries to discover services running inside
-      (other) docker containers.
+   Skydock:  Skydoc [SkyDock-git] works with Docker [Docker] containers.
+      Skydock monitors docker events when containers start, stop, die,
+      get killed, etc and inserts records into SkyDNS.  This allows
+      standard DNS queries to discover services running inside (other)
+      docker containers.
 
 10.  References
 
@@ -433,12 +433,12 @@ Technical Note                   SkyDNS                     January 2014
 
 10.2.  Informative References
 
+   [Docker]   "Docker: an open source project to pack, ship and run any
+              application as a lightweight container", 2013.
+
    [SkyDock-git]
               Crosby, C., "SkyDock Git repository", 2014.
 
-10.3.  URIs
-
-   [1] http://blog.gopheracademy.com/skydns
 
 
 
@@ -450,6 +450,10 @@ Ketelsen, et al.                                                [Page 8]
 Technical Note                   SkyDNS                     January 2014
 
 
+10.3.  URIs
+
+   [1] http://blog.gopheracademy.com/skydns
+
 Appendix A.  Examples
 
    In this document we used the "skydnsctl" command line utility to
@@ -459,19 +463,19 @@ Appendix A.  Examples
 
    For instance, registering a service with "curl":
 
-   curl -X PUT -L http://localhost:8080/skydns/services/1001 -d \
-   '{"Name":"TestService", "Version":"1.0.0","Environment":"Production",
-   "Region":"East","Host":"web1.site.com","Port":80,"TTL":4000}'
+   curl -X PUT -L http://localhost:8080/skydns/services/1001 \
+   -d '{"Name":"TestService", "Version":"1.0.0",
+        "Environment":"Production", "Region":"East",
+        "Host":"web1.site.com","Port":80,"TTL":4000}'
 
    And then looking up services with "dig".
 
    All service in the production environment:
 
-       dig @localhost production.skydns.local SRV
+   dig +noall +answer @localhost production.skydns.local SRV
 
-   Which will result in:
+   Which will result in (note the TTL has counted down to 3979 second):
 
-   ;; ANSWER SECTION:
    production.skydns.local.  3979 IN SRV 10 20 80 web1.site.com.
 
    TODO from here:
@@ -494,10 +498,6 @@ Appendix A.  Examples
 
    This is where we've changed things up a bit, notice we used the "*"
    wildcard for version so we get any version, and because we've
-   supplied an explicit region that we're looking for we get that as the
-   highest DNS priority, with the weight being distributed evenly, then
-   all of our West instances still show up for fail-over, but with a
-   higher Priority.
 
 
 
@@ -505,6 +505,11 @@ Ketelsen, et al.                                                [Page 9]
 
 Technical Note                   SkyDNS                     January 2014
 
+
+   supplied an explicit region that we're looking for we get that as the
+   highest DNS priority, with the weight being distributed evenly, then
+   all of our West instances still show up for fail-over, but with a
+   higher Priority.
 
 ;; QUESTION SECTION:
 ;east.*.testservice.production.skydns.local. IN SRV
@@ -550,11 +555,6 @@ Appendix B.  License
 
    Copyright (C) 2013 Erik St. Martin, Brian Ketelsen
 
-   Permission is hereby granted, free of charge, to any person obtaining
-   a copy of this software and associated documentation files (the
-   "Software"), to deal in the Software without restriction, including
-   without limitation the rights to use, copy, modify, merge, publish,
-
 
 
 Ketelsen, et al.                                               [Page 10]
@@ -562,6 +562,10 @@ Ketelsen, et al.                                               [Page 10]
 Technical Note                   SkyDNS                     January 2014
 
 
+   Permission is hereby granted, free of charge, to any person obtaining
+   a copy of this software and associated documentation files (the
+   "Software"), to deal in the Software without restriction, including
+   without limitation the rights to use, copy, modify, merge, publish,
    distribute, sublicense, and/or sell copies of the Software, and to
    permit persons to whom the Software is furnished to do so, subject to
    the following conditions:
@@ -594,10 +598,6 @@ Authors' Addresses
 
    Email: miek@miek.nl
    URI:   http://miek.nl
-
-
-
-
 
 
 

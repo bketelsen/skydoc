@@ -4,6 +4,7 @@
 <!ENTITY pandocMiddle   PUBLIC '' 'middle.xml'>
 <!ENTITY pandocBack     PUBLIC '' 'back.xml'>
 
+<!ENTITY Docker       PUBLIC '' 'bib/reference.Docker.xml'>
 <!ENTITY Golang       PUBLIC '' 'bib/reference.Golang.xml'>
 <!ENTITY Raft         PUBLIC '' 'bib/reference.Raft.xml'>
 <!ENTITY REST         PUBLIC '' 'bib/reference.REST.xml'>
@@ -74,6 +75,7 @@
         &SkyDNS-git;
     </references>
     <references title="Informative References">
+        &Docker;
         &SkyDock-git;
     </references>
     &pandocBack;

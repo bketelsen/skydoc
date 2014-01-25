@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<reference anchor='Docker'>
+<front>
+
+<title>Docker: an open source project to pack, ship and run any application as a lightweight container</title>
+<author initials='' surname='' fullname='Docker Authors'> <organization /> </author>
+<date year='2013' /> <!-- year is probably wrong -->
+</front>
+<format type='WEB' target='https://docker.io/' />
+</reference>
