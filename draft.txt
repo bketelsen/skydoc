@@ -55,7 +55,7 @@ Table of Contents
 
 Ketelsen, et al.                                                [Page 1]
 
-Technical Note                   SkyDNS                     January 2014
+Technical Note 0x1               SkyDNS                     January 2014
 
 
    Besides serving SRV records, which include _all_ the information you
@@ -111,7 +111,7 @@ Technical Note                   SkyDNS                     January 2014
 
 Ketelsen, et al.                                                [Page 2]
 
-Technical Note                   SkyDNS                     January 2014
+Technical Note 0x1               SkyDNS                     January 2014
 
 
    1.  "/skydns/services/$UUID", used for service management.
@@ -167,7 +167,7 @@ Technical Note                   SkyDNS                     January 2014
 
 Ketelsen, et al.                                                [Page 3]
 
-Technical Note                   SkyDNS                     January 2014
+Technical Note 0x1               SkyDNS                     January 2014
 
 
    Note that instead of a hostname you can also use an IP address (IPv4
@@ -223,7 +223,7 @@ Technical Note                   SkyDNS                     January 2014
 
 Ketelsen, et al.                                                [Page 4]
 
-Technical Note                   SkyDNS                     January 2014
+Technical Note 0x1               SkyDNS                     January 2014
 
 
    First the service for which this callback is added is named.  Then
@@ -279,7 +279,7 @@ Technical Note                   SkyDNS                     January 2014
 
 Ketelsen, et al.                                                [Page 5]
 
-Technical Note                   SkyDNS                     January 2014
+Technical Note 0x1               SkyDNS                     January 2014
 
 
 4.1.  Wildcards
@@ -335,7 +335,7 @@ Technical Note                   SkyDNS                     January 2014
 
 Ketelsen, et al.                                                [Page 6]
 
-Technical Note                   SkyDNS                     January 2014
+Technical Note 0x1               SkyDNS                     January 2014
 
 
       Please test this before relying on it in production, as there may
@@ -391,7 +391,7 @@ Technical Note                   SkyDNS                     January 2014
 
 Ketelsen, et al.                                                [Page 7]
 
-Technical Note                   SkyDNS                     January 2014
+Technical Note 0x1               SkyDNS                     January 2014
 
 
 8.  Security Considerations
@@ -447,7 +447,7 @@ Technical Note                   SkyDNS                     January 2014
 
 Ketelsen, et al.                                                [Page 8]
 
-Technical Note                   SkyDNS                     January 2014
+Technical Note 0x1               SkyDNS                     January 2014
 
 
 10.3.  URIs
@@ -503,7 +503,7 @@ Appendix A.  Examples
 
 Ketelsen, et al.                                                [Page 9]
 
-Technical Note                   SkyDNS                     January 2014
+Technical Note 0x1               SkyDNS                     January 2014
 
 
    This is where we've changed things up a bit, notice we used the "*"
@@ -559,7 +559,7 @@ Appendix B.  License
 
 Ketelsen, et al.                                               [Page 10]
 
-Technical Note                   SkyDNS                     January 2014
+Technical Note 0x1               SkyDNS                     January 2014
 
 
    distribute, sublicense, and/or sell copies of the Software, and to
