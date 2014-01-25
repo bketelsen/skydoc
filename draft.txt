@@ -21,19 +21,19 @@ Table of Contents
      3.3.  Deregistration  . . . . . . . . . . . . . . . . . . . . .   4
      3.4.  Call backs  . . . . . . . . . . . . . . . . . . . . . . .   4
    4.  DNS Service Discovery . . . . . . . . . . . . . . . . . . . .   5
-     4.1.  Wildcards . . . . . . . . . . . . . . . . . . . . . . . .   5
+     4.1.  Wildcards . . . . . . . . . . . . . . . . . . . . . . . .   6
      4.2.  Record Types  . . . . . . . . . . . . . . . . . . . . . .   6
    5.  HTTP Service Discovery  . . . . . . . . . . . . . . . . . . .   6
    6.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   6
      6.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   6
-   7.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   6
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-   9.  Projects Using SkyDNS . . . . . . . . . . . . . . . . . . . .   7
+   7.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   7
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+   9.  Projects Using SkyDNS . . . . . . . . . . . . . . . . . . . .   8
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
      10.1.  Normative References . . . . . . . . . . . . . . . . . .   8
      10.2.  Informative References . . . . . . . . . . . . . . . . .   8
      10.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .   8
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   8
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   9
    Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .  10
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
 
@@ -59,10 +59,10 @@ Technical Note                   SkyDNS                     January 2014
 
 
    Besides serving SRV records, which include _all_ the information you
-   need to connect to your service, SkyDNS will also return A records.
-   This is useful if you already know what port a particular service is
-   using, and you just want a list of IP addresses with known running
-   instances.
+   need to connect to your service, SkyDNS will also return A or AAAA
+   records.  This is useful if you already know what port a particular
+   service is using, and you just want a list of IP addresses with known
+   running instances.
 
    The development of SkyDNS takes place on Github [SkyDNS-git].  SkyDNS
    is written in the Go language [Golang].  It is licenced under the MIT
@@ -73,9 +73,10 @@ Technical Note                   SkyDNS                     January 2014
 2.1.  Naming
 
    Service names are registered by a submitting an HTTP query (with JSON
-   data) to SkyDNS, see Section 3 for more details.  Querying SkyDNS can
-   be done either via HTTP or via the DNS (see Section 4).  SkyDNS
-   divides the name for a service in different components, as follows:
+   [RFC4627] data) to SkyDNS, see Section 3 for more details.  Querying
+   SkyDNS can be done either via HTTP or via the DNS (see Section 4).
+   SkyDNS divides the name for a service in different components, as
+   follows:
 
    Name:  The name of your service, e.g., "rails" or "web".  Note that
       in this document we sometimes refer to this as Service.
@@ -105,7 +106,6 @@ Technical Note                   SkyDNS                     January 2014
    SkyDNS exposes a RESTful [REST] interface.  There are two entry
    points:
 
-   1.  "/skydns/services/UUID", used for service management.
 
 
 
@@ -114,7 +114,9 @@ Ketelsen, et al.                                                [Page 2]
 Technical Note                   SkyDNS                     January 2014
 
 
-   2.  "/skydns/callbacks/UUID", used for callback management.
+   1.  "/skydns/services/$UUID", used for service management.
+
+   2.  "/skydns/callbacks/$UUID", used for callback management.
 
    The UUID [RFC4122] is generated _by the client_ and used as an unique
    identifier for the service.  Each request MUST carry a JSON [RFC4627]
@@ -159,9 +161,7 @@ Technical Note                   SkyDNS                     January 2014
    live for the number of seconds supplied in your TTL (10 seconds in
    our example), unless you send a heartbeat to update the TTL.
 
-   Note that instead of a hostname you can also use an IP address (IPv4
-   or IPV6), in that case SkyDNS will make up an hostname:
-   "$UUID.skydns.local".
+
 
 
 
@@ -169,6 +169,10 @@ Ketelsen, et al.                                                [Page 3]
 
 Technical Note                   SkyDNS                     January 2014
 
+
+   Note that instead of a hostname you can also use an IP address (IPv4
+   or IPV6), in that case SkyDNS will make up an hostname:
+   "$UUID.skydns.local".
 
    TODO(miek): Not specifying all the elements, sane defaults?
 
@@ -183,7 +187,7 @@ Technical Note                   SkyDNS                     January 2014
    The TTL can be updated by sending an HTTP PATCH request to SkyDNS ("/
    skydns/services/$UUID") with an updated TTL: "{ "TTL":20 }".
 
-   TODO(miek): patch other things too.
+   TODO(miek): patch other things too?
 
 3.3.  Deregistration
 
@@ -213,10 +217,6 @@ Technical Note                   SkyDNS                     January 2014
      Figure 3: JSON payload definition when registring a callback with
                                   SkyDNS.
 
-   First the service for which this callback is added is named.  Then
-   the call back return address is specified:
-
-   Reply:  Reply back to this address.
 
 
 
@@ -225,6 +225,11 @@ Ketelsen, et al.                                                [Page 4]
 
 Technical Note                   SkyDNS                     January 2014
 
+
+   First the service for which this callback is added is named.  Then
+   the call back return address is specified:
+
+   Reply:  Reply back to this address.
 
    Port:  Reply back to this port.
 
@@ -253,26 +258,21 @@ Technical Note                   SkyDNS                     January 2014
    are more generic, than the subdomains to their left.  This allows for
    you to supply only the positions you care about:
 
-   +--------------------------+---------------------------------------+
-   | Elements in the Request  | Result                                |
-   +--------------------------+---------------------------------------+
-   | H. V. R. N. E.           | A specific host                       |
-   | V. R. N. E.              | All hosts, disregarding the hostname  |
-   | R. N. E.                 | All hosts in this region              |
-   | N. E.                    | All hosts in this environment/name    |
-   | E.                       | All hosts in this environment         |
-   +--------------------------+---------------------------------------+
+          +------------+---------------------------------------+
+          | Elements   | Result                                |
+          +------------+---------------------------------------+
+          | H V R N E  | A specific host                       |
+          | V R N E    | All hosts, disregarding the hostname  |
+          | R N E      | All hosts in this region              |
+          | N E        | All hosts in this environment/name    |
+          | E          | All hosts in this environment         |
+          +------------+---------------------------------------+
 
     Table 1: Making requests less and less specific.  In this table the
-    following abbreviations are used: H. is Host, V. is Version, R. is
-               Region, N. is Name and E. is for Environment.
+      following abbreviations are used: H is Host, V is Version, R is
+                Region, N is Name and E is for Environment.
 
-4.1.  Wildcards
 
-   In addition to leaving elements out, it is something convenient to
-   leave out names "in the middle".  This is supported in SkyDNS by
-   means of wildcards.  The wildcard character is "*" (without the
-   quotes).  The wildcard can be places anywhere in a service name,
 
 
 
@@ -282,6 +282,12 @@ Ketelsen, et al.                                                [Page 5]
 Technical Note                   SkyDNS                     January 2014
 
 
+4.1.  Wildcards
+
+   In addition to leaving elements out, it is something convenient to
+   leave out names "in the middle".  This is supported in SkyDNS by
+   means of wildcards.  The wildcard character is "*" (without the
+   quotes).  The wildcard can be places anywhere in a service name,
    making that element match anything.  Note the following two service
    names are equivalent.
 
@@ -296,7 +302,8 @@ Technical Note                   SkyDNS                     January 2014
    records, A, AAAA and SRV records respectively.
 
    Services can be found by querying SkyDNS via any DNS client or
-   utility.
+   utility or via the standard DNS resolving of the underlaying
+   operating system.
 
 5.  HTTP Service Discovery
 
@@ -322,6 +329,15 @@ Technical Note                   SkyDNS                     January 2014
    When provided with more than one nameserver SkyDNS will round robin
    between the them to spread the load.
 
+
+
+
+
+Ketelsen, et al.                                                [Page 6]
+
+Technical Note                   SkyDNS                     January 2014
+
+
       Please test this before relying on it in production, as there may
       be edge cases that don't work as planned.
 
@@ -330,13 +346,6 @@ Technical Note                   SkyDNS                     January 2014
    Below we will add and query for services in SkyDNS.  It is assumed
    SkyDNS is running on port 8080 on localhost for HTTP and on port 1053
    for DNS.  For "skydnsctl" we use an environment variable:
-
-
-
-Ketelsen, et al.                                                [Page 6]
-
-Technical Note                   SkyDNS                     January 2014
-
 
    export SKYDNS=http://localhost:8080
    export SKYDNS_DNSPORT=1053
@@ -352,26 +361,38 @@ Technical Note                   SkyDNS                     January 2014
     +---------------------+----------+---------+-------+--------------+
 
    All running on port 8008 and initially with a TTL of 100 seconds.  We
-   used the open source tool "uuidgen" (TODO:REF) for generation the
-   UUID.
+   used the open source tool "uuidgen" for the generation of the UUID.
 
-% skydnsctl add $(uuidgen) \
-'{"Name":"web","Environment":"production","Region":"east","Version":"1.0.0",
-  "Host":"web1.example.com","Port":8008,"TTL":100}'
-e68a2880-5367-423d-9fd8-e665bffcb426 added to skydns
+   % skydnsctl add $(uuidgen) \
+   '{"Name":"web","Environment":"production","Region":"east",
+     "Version":"1.0.0", "Host":"web1.example.com","Port":8008,
+     "TTL":100}'
+   e68a2880-5367-423d-9fd8-e665bffcb426 added to skydns
 
-% skydnsctl add $(uuidgen) \
-'{"Name":"web","Environment":"production","Region":"west","Version":"1.0.0",
-  "Host":"web2.example.com","Port":8008,"TTL":100}'
-4f890a83-9704-424f-aa41-d120185cb427 added to skydns
+   % skydnsctl add $(uuidgen) \
+   '{"Name":"web","Environment":"production","Region":"west",
+     "Version":"1.0.0", "Host":"web2.example.com","Port":8008,
+     "TTL":100}'
+   4f890a83-9704-424f-aa41-d120185cb427 added to skydns
 
-% skydnsctl add $(uuidgen) \
-'{"Name":"web","Environment":"testing","Region":"east","Version":"1.0.1",
-  "Host":"web3.example.com","Port":8008,"TTL":100}'
-cc5aeaa5-02a5-4d44-91d8-cec4f950af2e
+   % skydnsctl add $(uuidgen) \
+   '{"Name":"web","Environment":"testing","Region":"east",
+     "Version":"1.0.1", "Host":"web3.example.com","Port":8008,
+     "TTL":100}'
+   cc5aeaa5-02a5-4d44-91d8-cec4f950af2e
 
    With "skydnsctl -json" we can list all services (in JSON format) that
    are now registered in SkyDNS.
+
+
+
+
+
+
+Ketelsen, et al.                                                [Page 7]
+
+Technical Note                   SkyDNS                     January 2014
+
 
 8.  Security Considerations
 
@@ -386,13 +407,6 @@ cc5aeaa5-02a5-4d44-91d8-cec4f950af2e
       stop, die, get killed, etc and inserts records into SkyDNS.  This
       allows standard DNS queries to discover services running inside
       (other) docker containers.
-
-
-
-Ketelsen, et al.                                                [Page 7]
-
-Technical Note                   SkyDNS                     January 2014
-
 
 10.  References
 
@@ -426,6 +440,16 @@ Technical Note                   SkyDNS                     January 2014
 
    [1] http://blog.gopheracademy.com/skydns
 
+
+
+
+
+
+Ketelsen, et al.                                                [Page 8]
+
+Technical Note                   SkyDNS                     January 2014
+
+
 Appendix A.  Examples
 
    In this document we used the "skydnsctl" command line utility to
@@ -442,13 +466,6 @@ Appendix A.  Examples
    And then looking up services with "dig".
 
    All service in the production environment:
-
-
-
-Ketelsen, et al.                                                [Page 8]
-
-Technical Note                   SkyDNS                     January 2014
-
 
        dig @localhost production.skydns.local SRV
 
@@ -482,6 +499,13 @@ Technical Note                   SkyDNS                     January 2014
    all of our West instances still show up for fail-over, but with a
    higher Priority.
 
+
+
+Ketelsen, et al.                                                [Page 9]
+
+Technical Note                   SkyDNS                     January 2014
+
+
 ;; QUESTION SECTION:
 ;east.*.testservice.production.skydns.local. IN SRV
 
@@ -496,15 +520,6 @@ east.*.testservice.production.skydns.local. 3892 IN SRV 20 33 80   web4.site.com
    service matching the above patterns.
 
    Let's add some web servers to SkyDNS:
-
-
-
-
-
-Ketelsen, et al.                                                [Page 9]
-
-Technical Note                   SkyDNS                     January 2014
-
 
 curl -X PUT -L http://localhost:8080/skydns/services/1011 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.10","Port":80,"TTL":400000}'
 curl -X PUT -L http://localhost:8080/skydns/services/1012 -d '{"Name":"rails","Version":"1.0.0","Environment":"Production","Region":"East","Host":"127.0.0.11","Port":80,"TTL":400000}'
@@ -539,6 +554,14 @@ Appendix B.  License
    a copy of this software and associated documentation files (the
    "Software"), to deal in the Software without restriction, including
    without limitation the rights to use, copy, modify, merge, publish,
+
+
+
+Ketelsen, et al.                                               [Page 10]
+
+Technical Note                   SkyDNS                     January 2014
+
+
    distribute, sublicense, and/or sell copies of the Software, and to
    permit persons to whom the Software is furnished to do so, subject to
    the following conditions:
@@ -554,13 +577,6 @@ Appendix B.  License
    ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-
-
-Ketelsen, et al.                                               [Page 10]
-
-Technical Note                   SkyDNS                     January 2014
-
 
 Authors' Addresses
 
@@ -578,22 +594,6 @@ Authors' Addresses
 
    Email: miek@miek.nl
    URI:   http://miek.nl
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
