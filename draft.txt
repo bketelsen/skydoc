@@ -12,44 +12,44 @@ Abstract
 
 Table of Contents
 
-   1.  SkyDNS  . . . . . . . . . . . . . . . . . . . . . . . . . . .   1
-   2.  Services  . . . . . . . . . . . . . . . . . . . . . . . . . .   2
-     2.1.  Naming  . . . . . . . . . . . . . . . . . . . . . . . . .   2
-   3.  Service Management  . . . . . . . . . . . . . . . . . . . . .   2
-     3.1.  Registration  . . . . . . . . . . . . . . . . . . . . . .   3
-     3.2.  Heartbeat . . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.3.  Deregistration  . . . . . . . . . . . . . . . . . . . . .   4
-     3.4.  Call backs  . . . . . . . . . . . . . . . . . . . . . . .   4
-   4.  DNS Service Discovery . . . . . . . . . . . . . . . . . . . .   5
-     4.1.  Wildcards . . . . . . . . . . . . . . . . . . . . . . . .   6
-     4.2.  Record Types  . . . . . . . . . . . . . . . . . . . . . .   6
-   5.  HTTP Service Discovery  . . . . . . . . . . . . . . . . . . .   6
-   6.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   6
-     6.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   6
-   7.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   7
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
-   9.  Projects Using SkyDNS . . . . . . . . . . . . . . . . . . . .   8
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .   8
-     10.2.  Informative References . . . . . . . . . . . . . . . . .   8
-     10.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .   9
+   1.  Technical Notes . . . . . . . . . . . . . . . . . . . . . . .   1
+   2.  SkyDNS  . . . . . . . . . . . . . . . . . . . . . . . . . . .   1
+   3.  Services  . . . . . . . . . . . . . . . . . . . . . . . . . .   2
+     3.1.  Naming  . . . . . . . . . . . . . . . . . . . . . . . . .   2
+   4.  Service Management  . . . . . . . . . . . . . . . . . . . . .   3
+     4.1.  Registration  . . . . . . . . . . . . . . . . . . . . . .   3
+     4.2.  Heartbeat . . . . . . . . . . . . . . . . . . . . . . . .   4
+     4.3.  Deregistration  . . . . . . . . . . . . . . . . . . . . .   4
+     4.4.  Call backs  . . . . . . . . . . . . . . . . . . . . . . .   4
+   5.  DNS Service Discovery . . . . . . . . . . . . . . . . . . . .   5
+     5.1.  Wildcards . . . . . . . . . . . . . . . . . . . . . . . .   6
+     5.2.  Record Types  . . . . . . . . . . . . . . . . . . . . . .   6
+   6.  HTTP Service Discovery  . . . . . . . . . . . . . . . . . . .   6
+   7.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   6
+     7.1.  DNS Forwarding  . . . . . . . . . . . . . . . . . . . . .   7
+   8.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   7
+   9.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+   10. Projects Using SkyDNS . . . . . . . . . . . . . . . . . . . .   8
+   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     11.1.  Normative References . . . . . . . . . . . . . . . . . .   8
+     11.2.  Informative References . . . . . . . . . . . . . . . . .   9
+     11.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .   9
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   9
-   Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .  10
+   Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .  11
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
 
-1.  SkyDNS
+1.  Technical Notes
+
+   Technical Notes provide documentation and background information
+   concerning Skynet and SkyDNS.
+
+2.  SkyDNS
 
    SkyDNS (Announcement Blog Post [1]) is a distributed service for
    announcement and discovery of services.  It leverages Raft [Raft] for
    high-availability and consensus, and utilizes DNS queries [RFC1034]
    [RFC1035] to discover available services.  This is done by using SRV
-   records in DNS, with special meaning given to subdomains, priorities
-   and weights.
 
-   SkyDNS will also act as a forwarding DNS proxy, so that you can set
-   your SkyDNS instance as the primary DNS service in "/etc/resolv.conf"
-   and SkyDNS will forward and proxy requests for which it is not
-   authoritative.
 
 
 
@@ -57,6 +57,14 @@ Ketelsen, et al.                                                [Page 1]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
+
+   records in DNS, with special meaning given to subdomains, priorities
+   and weights.
+
+   SkyDNS will also act as a forwarding DNS proxy, so that you can set
+   your SkyDNS instance as the primary DNS service in "/etc/resolv.conf"
+   and SkyDNS will forward and proxy requests for which it is not
+   authoritative.
 
    Besides serving SRV records, which include _all_ the information you
    need to connect to your service, SkyDNS will also return A or AAAA
@@ -68,13 +76,13 @@ Technical Note 0x1               SkyDNS                     January 2014
    is written in the Go language [Golang].  It is licenced under the MIT
    License, see Appendix B.
 
-2.  Services
+3.  Services
 
-2.1.  Naming
+3.1.  Naming
 
    Service names are registered by a submitting an HTTP query (with JSON
-   [RFC4627] data) to SkyDNS, see Section 3 for more details.  Querying
-   SkyDNS can be done either via HTTP or via the DNS (see Section 4).
+   [RFC4627] data) to SkyDNS, see Section 4 for more details.  Querying
+   SkyDNS can be done either via HTTP or via the DNS (see Section 5).
    SkyDNS divides the name for a service in different components, as
    follows:
 
@@ -98,14 +106,6 @@ Technical Note 0x1               SkyDNS                     January 2014
 
              Figure 1: A fully qualified SkyDNS service name.
 
-   Each registered service has a time to live (TTL).  When the TTL
-   expires the services is expunged from SkyDNS.
-
-3.  Service Management
-
-   SkyDNS exposes a RESTful [REST] interface.  There are two entry
-   points:
-
 
 
 
@@ -113,6 +113,14 @@ Ketelsen, et al.                                                [Page 2]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
+
+   Each registered service has a time to live (TTL).  When the TTL
+   expires the services is expunged from SkyDNS.
+
+4.  Service Management
+
+   SkyDNS exposes a RESTful [REST] interface.  There are two entry
+   points:
 
    1.  "/skydns/services/$UUID", used for service management.
 
@@ -124,7 +132,7 @@ Technical Note 0x1               SkyDNS                     January 2014
 
    SkyDNS also supports a shared secret which is used for authorization.
 
-3.1.  Registration
+4.1.  Registration
 
    When registering a service a client generates an UUID (denoted $UUID
    here) and makes a HTTP PUT request to `/skydns/services/$UUID` with
@@ -153,14 +161,6 @@ Technical Note 0x1               SkyDNS                     January 2014
    If a service with this $UUID already exists you will receive back an
    HTTP status code of: *409 Conflict*
 
-   When using HTTP authorization and the wrong password SkyDNS will
-   return an HTTP status code of: *403 Forbidden*
-
-   If successful SkyDNS will return an HTTP status code of: *201
-   Created* SkyDNS will now have an entry for your service that will
-   live for the number of seconds supplied in your TTL (10 seconds in
-   our example), unless you send a heartbeat to update the TTL.
-
 
 
 
@@ -170,32 +170,40 @@ Ketelsen, et al.                                                [Page 3]
 Technical Note 0x1               SkyDNS                     January 2014
 
 
+   When using HTTP authorization and the wrong password SkyDNS will
+   return an HTTP status code of: *403 Forbidden*
+
+   If successful SkyDNS will return an HTTP status code of: *201
+   Created* SkyDNS will now have an entry for your service that will
+   live for the number of seconds supplied in your TTL (10 seconds in
+   our example), unless you send a heartbeat to update the TTL.
+
    Note that instead of a hostname you can also use an IP address (IPv4
    or IPV6), in that case SkyDNS will make up an hostname:
    "$UUID.skydns.local".
 
    TODO(miek): Not specifying all the elements, sane defaults?
 
-3.2.  Heartbeat
+4.2.  Heartbeat
 
    SkyDNS requires that services submit an HTTP request to update their
    TTL within the TTL they last supplied.  If a service fails to do so
    within this time frame SkyDNS will expire the service automatically.
    This will allow for nodes to fail and DNS to reflect this quickly
-   (also see Section 3.4).
+   (also see Section 4.4).
 
    The TTL can be updated by sending an HTTP PATCH request to SkyDNS ("/
    skydns/services/$UUID") with an updated TTL: "{ "TTL":20 }".
 
    TODO(miek): patch other things too?
 
-3.3.  Deregistration
+4.3.  Deregistration
 
    To remove a service from SkyDNS without waiting for the TTL to
    expire, you simply send an HTTP DELETE, without any JSON data to "/
    skydns/services/$UUID".
 
-3.4.  Call backs
+4.4.  Call backs
 
    Registering a call back is similar to registering a service, the URL
    for registering call backs is "/skydns/services/$CUUID", where
@@ -203,6 +211,20 @@ Technical Note 0x1               SkyDNS                     January 2014
    service that registers a call back will receive an HTTP request,
    every time something changes in the service definition the callback
    is executed.  Currently they are called when the service is deleted.
+
+
+
+
+
+
+
+
+
+
+Ketelsen, et al.                                                [Page 4]
+
+Technical Note 0x1               SkyDNS                     January 2014
+
 
    {
      "Name":"TestService"
@@ -216,15 +238,6 @@ Technical Note 0x1               SkyDNS                     January 2014
 
      Figure 3: JSON payload definition when registring a callback with
                                   SkyDNS.
-
-
-
-
-
-Ketelsen, et al.                                                [Page 4]
-
-Technical Note 0x1               SkyDNS                     January 2014
-
 
    First the service for which this callback is added is named.  Then
    the call back return address is specified:
@@ -248,7 +261,7 @@ Technical Note 0x1               SkyDNS                     January 2014
    TODO(miek): failed callback registration, deleting callbacks (not
    supported).
 
-4.  DNS Service Discovery
+5.  DNS Service Discovery
 
    SkyDNS exports the services via HTTP and DNS.  When using the DNS for
    service discovery even unchanged clients can be used.  Queries to
@@ -257,6 +270,17 @@ Technical Note 0x1               SkyDNS                     January 2014
    syntax when querying follows a pattern where the right most positions
    are more generic, than the subdomains to their left.  This allows for
    you to supply only the positions you care about:
+
+
+
+
+
+
+
+Ketelsen, et al.                                                [Page 5]
+
+Technical Note 0x1               SkyDNS                     January 2014
+
 
           +------------+---------------------------------------+
           | Elements   | Result                                |
@@ -272,17 +296,7 @@ Technical Note 0x1               SkyDNS                     January 2014
       following abbreviations are used: H is Host, V is Version, R is
                 Region, N is Name and E is for Environment.
 
-
-
-
-
-
-Ketelsen, et al.                                                [Page 5]
-
-Technical Note 0x1               SkyDNS                     January 2014
-
-
-4.1.  Wildcards
+5.1.  Wildcards
 
    In addition to leaving elements out, it is something convenient to
    leave out names "in the middle".  This is supported in SkyDNS by
@@ -296,7 +310,7 @@ Technical Note 0x1               SkyDNS                     January 2014
 
    TODO(miek): more examples.
 
-4.2.  Record Types
+5.2.  Record Types
 
    You can query SkyDNS for IPv4 addresses, IPv6 addresses and server
    records, A, AAAA and SRV records respectively.
@@ -305,20 +319,29 @@ Technical Note 0x1               SkyDNS                     January 2014
    utility or via the standard DNS resolution of the underlaying
    operating system.
 
-5.  HTTP Service Discovery
+6.  HTTP Service Discovery
 
    Currently you may only retrieve a service's info by UUID of the
    service, in the future we may implement querying of the services
    similar to the DNS interface.
 
-6.  Implementation
+7.  Implementation
 
    The current implementation of SkyDNS ([SkyDNS-git], consists out of
    server and a client library.  This client library is also used in a
+
+
+
+
+Ketelsen, et al.                                                [Page 6]
+
+Technical Note 0x1               SkyDNS                     January 2014
+
+
    command line tool "skydnsctl" which allows for easy registration and
    querying of SkyDNS.
 
-6.1.  DNS Forwarding
+7.1.  DNS Forwarding
 
    By specifying nameservers on the "skydns" command line, you create a
    DNS forwarding proxy.  Requests for which SkyDNS isn't authoritative
@@ -329,19 +352,10 @@ Technical Note 0x1               SkyDNS                     January 2014
    When provided with more than one nameserver SkyDNS will round robin
    between the them to spread the load.
 
-
-
-
-
-Ketelsen, et al.                                                [Page 6]
-
-Technical Note 0x1               SkyDNS                     January 2014
-
-
       Please test this before relying on it in production, as there may
       be edge cases that don't work as planned.
 
-7.  Examples
+8.  Examples
 
    Below we will add and query for services in SkyDNS.  It is assumed
    SkyDNS is running on port 8080 on localhost for HTTP and on port 1053
@@ -362,6 +376,23 @@ Technical Note 0x1               SkyDNS                     January 2014
 
    All running on port 8008 and initially with a TTL of 100 seconds.  We
    used the open source tool "uuidgen" for the generation of the UUID.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ketelsen, et al.                                                [Page 7]
+
+Technical Note 0x1               SkyDNS                     January 2014
+
 
    % skydnsctl add $(uuidgen) \
    '{"Name":"web","Environment":"production","Region":"east",
@@ -384,23 +415,13 @@ Technical Note 0x1               SkyDNS                     January 2014
    With "skydnsctl -json" we can list all services (in JSON format) that
    are now registered in SkyDNS.
 
-
-
-
-
-
-Ketelsen, et al.                                                [Page 7]
-
-Technical Note 0x1               SkyDNS                     January 2014
-
-
-8.  Security Considerations
+9.  Security Considerations
 
    Security depends very much on the randomness of the generated UUIDs
 
    TODO(miek)
 
-9.  Projects Using SkyDNS
+10.  Projects Using SkyDNS
 
    Skydock:  Skydoc [SkyDock-git] works with Docker [Docker] containers.
       Skydock monitors docker events when containers start, stop, die,
@@ -408,9 +429,9 @@ Technical Note 0x1               SkyDNS                     January 2014
       standard DNS queries to discover services running inside (other)
       docker containers.
 
-10.  References
+11.  References
 
-10.1.  Normative References
+11.1.  Normative References
 
    [Golang]   "The Go Programming Language", 2011.
 
@@ -419,6 +440,15 @@ Technical Note 0x1               SkyDNS                     January 2014
 
    [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
               STD 13, RFC 1034, November 1987.
+
+
+
+
+
+Ketelsen, et al.                                                [Page 8]
+
+Technical Note 0x1               SkyDNS                     January 2014
+
 
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, November 1987.
@@ -437,23 +467,15 @@ Technical Note 0x1               SkyDNS                     January 2014
               Martin, E., Ketelsen, B., Gieben, R., Carey, C., and C.
               Crosby, "SkyDNS Git repository", 2012.
 
-10.2.  Informative References
+11.2.  Informative References
 
    [Docker]   "Docker: an open source project to pack, ship and run any
               application as a lightweight container", 2013.
 
-
-
-
-Ketelsen, et al.                                                [Page 8]
-
-Technical Note 0x1               SkyDNS                     January 2014
-
-
    [SkyDock-git]
               Crosby, C., "SkyDock Git repository", 2014.
 
-10.3.  URIs
+11.3.  URIs
 
    [1] http://blog.gopheracademy.com/skydns
 
@@ -477,6 +499,13 @@ Appendix A.  Examples
 
    dig +noall +answer @localhost production.skydns.local SRV
 
+
+
+Ketelsen, et al.                                                [Page 9]
+
+Technical Note 0x1               SkyDNS                     January 2014
+
+
    Which will result in (note the TTL has counted down to 3979 second):
 
    production.skydns.local.  3979 IN SRV 10 20 80 web1.site.com.
@@ -495,16 +524,6 @@ Appendix A.  Examples
 1-0-0.testservice.production.skydns.local. 3600 IN  SRV 10 20 9000 server24.
 1-0-0.testservice.production.skydns.local. 3956 IN  SRV 10 20 80   web3.site.com.
 1-0-0.testservice.production.skydns.local. 3961 IN  SRV 10 20 80   web4.site.com.
-
-
-
-
-
-
-Ketelsen, et al.                                                [Page 9]
-
-Technical Note 0x1               SkyDNS                     January 2014
-
 
    All TestService Instances at any version, within the East region "dig
    +noall +answer @localhost east.*.testservice.production.skydns.local
@@ -536,6 +555,13 @@ curl -X PUT -L http://localhost:8080/skydns/services/1014 -d '{"Name":"rails","V
    Now do a normal DNS query: "dig +noall +answer
    rails.production.skydns.local"
 
+
+
+Ketelsen, et al.                                               [Page 10]
+
+Technical Note 0x1               SkyDNS                     January 2014
+
+
    rails.production.skydns.local. 399918 IN A  127.0.0.10
    rails.production.skydns.local. 399918 IN A  127.0.0.11
    rails.production.skydns.local. 399918 IN A  127.0.0.12
@@ -553,14 +579,6 @@ Appendix B.  License
    The MIT License (MIT)
 
    Copyright (C) 2013 Erik St. Martin, Brian Ketelsen
-
-
-
-
-Ketelsen, et al.                                               [Page 10]
-
-Technical Note 0x1               SkyDNS                     January 2014
-
 
    Permission is hereby granted, free of charge, to any person obtaining
    a copy of this software and associated documentation files (the
@@ -594,6 +612,12 @@ Authors' Addresses
    Email: alakriti@gmail.com
 
 
+
+Ketelsen, et al.                                               [Page 11]
+
+Technical Note 0x1               SkyDNS                     January 2014
+
+
    R. (Miek) Gieben
 
    Email: miek@miek.nl
@@ -613,4 +637,36 @@ Authors' Addresses
 
 
 
-Ketelsen, et al.                                               [Page 11]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ketelsen, et al.                                               [Page 12]
