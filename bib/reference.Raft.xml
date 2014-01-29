@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<reference anchor='Raft'>
+<reference anchor='Raft' target='https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf'>
 <front>
 
 <title>In Search of an Understandable Consensus Algorithm</title>

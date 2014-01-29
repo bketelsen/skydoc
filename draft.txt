@@ -25,7 +25,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 30, 2014.
+   This Internet-Draft will expire on August 2, 2014.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Table of Contents
 
 
 
-Ketelsen, et al.          Expires July 30, 2014                 [Page 1]
+Ketelsen, et al.         Expires August 2, 2014                 [Page 1]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
@@ -74,7 +74,7 @@ Technical Note 0x1               SkyDNS                     January 2014
      11.1.  Normative References . . . . . . . . . . . . . . . . . .   9
      11.2.  Informative References . . . . . . . . . . . . . . . . .   9
      11.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .   9
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .   9
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  10
    Appendix B.  License  . . . . . . . . . . . . . . . . . . . . . .  11
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  12
 
@@ -109,7 +109,7 @@ Technical Note 0x1               SkyDNS                     January 2014
 
 
 
-Ketelsen, et al.          Expires July 30, 2014                 [Page 2]
+Ketelsen, et al.         Expires August 2, 2014                 [Page 2]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
@@ -165,7 +165,7 @@ Technical Note 0x1               SkyDNS                     January 2014
 
 
 
-Ketelsen, et al.          Expires July 30, 2014                 [Page 3]
+Ketelsen, et al.         Expires August 2, 2014                 [Page 3]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
@@ -221,7 +221,7 @@ Technical Note 0x1               SkyDNS                     January 2014
 
 
 
-Ketelsen, et al.          Expires July 30, 2014                 [Page 4]
+Ketelsen, et al.         Expires August 2, 2014                 [Page 4]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
@@ -277,7 +277,7 @@ Technical Note 0x1               SkyDNS                     January 2014
 
 
 
-Ketelsen, et al.          Expires July 30, 2014                 [Page 5]
+Ketelsen, et al.         Expires August 2, 2014                 [Page 5]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
@@ -333,7 +333,7 @@ Technical Note 0x1               SkyDNS                     January 2014
 
 
 
-Ketelsen, et al.          Expires July 30, 2014                 [Page 6]
+Ketelsen, et al.         Expires August 2, 2014                 [Page 6]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
@@ -389,7 +389,7 @@ Technical Note 0x1               SkyDNS                     January 2014
 
 
 
-Ketelsen, et al.          Expires July 30, 2014                 [Page 7]
+Ketelsen, et al.         Expires August 2, 2014                 [Page 7]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
@@ -445,7 +445,7 @@ Technical Note 0x1               SkyDNS                     January 2014
 
 
 
-Ketelsen, et al.          Expires July 30, 2014                 [Page 8]
+Ketelsen, et al.         Expires August 2, 2014                 [Page 8]
 
 Technical Note 0x1               SkyDNS                     January 2014
 
@@ -454,7 +454,7 @@ Technical Note 0x1               SkyDNS                     January 2014
 
 11.1.  Normative References
 
-   [Golang]   "The Go Programming Language", 2011.
+   [Golang]   "The Go Programming Language", 2011, <http://golang.org/>.
 
    [REST]     Fielding, R., "Architectural Styles and the Design of
               Network-based Software Architectures", 2000.
@@ -473,16 +473,20 @@ Technical Note 0x1               SkyDNS                     January 2014
               JavaScript Object Notation (JSON)", RFC 4627, July 2006.
 
    [Raft]     Ongaro, D. and J. Ousterhout, "In Search of an
-              Understandable Consensus Algorithm", October 2013.
+              Understandable Consensus Algorithm", October 2013, <https:
+              //ramcloud.stanford.edu/wiki/download/attachments/11370504
+              /raft.pdf>.
 
    [SkyDNS-git]
               Martin, E., Ketelsen, B., Gieben, R., Carey, C., and C.
-              Crosby, "SkyDNS Git repository", 2012.
+              Crosby, "SkyDNS Git repository", 2012,
+              <http://github.com/skynetservices/skydns>.
 
 11.2.  Informative References
 
    [Docker]   "Docker: an open source project to pack, ship and run any
-              application as a lightweight container", 2013.
+              application as a lightweight container", 2013, <https://
+              docker.io/>.
 
    [SkyDock-git]
               Crosby, C., "SkyDock Git repository", 2014.
@@ -491,20 +495,23 @@ Technical Note 0x1               SkyDNS                     January 2014
 
    [1] http://blog.gopheracademy.com/skydns
 
+
+
+
+
+
+
+Ketelsen, et al.         Expires August 2, 2014                 [Page 9]
+
+Technical Note 0x1               SkyDNS                     January 2014
+
+
 Appendix A.  Examples
 
    In this document we used the "skydnsctl" command line utility to
    query SkyDNS, but as SkyDNS is using of the shelve protcols (HTTP and
    DNS) you can basically use whatever tool you like.  Even the standard
    resolving library in libc will suffice.
-
-
-
-
-Ketelsen, et al.          Expires July 30, 2014                 [Page 9]
-
-Technical Note 0x1               SkyDNS                     January 2014
-
 
    For instance, registering a service with "curl":
 
@@ -546,6 +553,15 @@ Technical Note 0x1               SkyDNS                     January 2014
    wildcard for version so we get any version, and because we've
    supplied an explicit region that we're looking for we get that as the
    highest DNS priority, with the weight being distributed evenly, then
+
+
+
+
+Ketelsen, et al.         Expires August 2, 2014                [Page 10]
+
+Technical Note 0x1               SkyDNS                     January 2014
+
+
    all of our West instances still show up for fail-over, but with a
    higher Priority.
 
@@ -554,13 +570,6 @@ east.*.testservice.production.skydns.local. 3881 IN SRV 10 50 8080 web2.site.com
 east.*.testservice.production.skydns.local. 3531 IN SRV 20 33 9000 server24.
 east.*.testservice.production.skydns.local. 3887 IN SRV 20 33 80   web3.site.com.
 east.*.testservice.production.skydns.local. 3892 IN SRV 20 33 80   web4.site.com.
-
-
-
-Ketelsen, et al.          Expires July 30, 2014                [Page 10]
-
-Technical Note 0x1               SkyDNS                     January 2014
-
 
    A Records To return A records, simply run a normal DNS query for a
    service matching the above patterns.
@@ -601,6 +610,14 @@ Appendix B.  License
    permit persons to whom the Software is furnished to do so, subject to
    the following conditions:
 
+
+
+
+Ketelsen, et al.         Expires August 2, 2014                [Page 11]
+
+Technical Note 0x1               SkyDNS                     January 2014
+
+
    The above copyright notice and this permission notice shall be
    included in all copies or substantial portions of the Software.
 
@@ -610,14 +627,6 @@ Appendix B.  License
    NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
    BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
    ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-
-
-
-Ketelsen, et al.          Expires July 30, 2014                [Page 11]
-
-Technical Note 0x1               SkyDNS                     January 2014
-
-
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 
@@ -660,13 +669,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-Ketelsen, et al.          Expires July 30, 2014                [Page 12]
+Ketelsen, et al.         Expires August 2, 2014                [Page 12]

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<reference anchor='SkyDNS-git'>
+<reference anchor='SkyDNS-git' target='http://github.com/skynetservices/skydns'>
 <front>
 
 <title>SkyDNS Git repository</title>
