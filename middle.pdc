@@ -87,7 +87,7 @@ When registering a service a client generates an UUID (denoted $UUID here) and m
     }
 ^[fix:json-payload-add::JSON payload definition when registring a service with SkyDNS.]
 
-Note: the are new elements here:
+Note: there are new elements here:
 
 Port:
 :   Specifies the port where the service runs.
@@ -190,7 +190,7 @@ E                           All hosts in this environment
 are used: H is Host, V is Version, R is Region, N is Name and E is for Environment.]
 
 ## Wildcards
-In addition to leaving elements out, it is something convenient to leave out names
+In addition to leaving elements out, it is sometimes convenient to leave out names
 "in the middle". This is supported in SkyDNS by means of wildcards. The wildcard
 character is `*` (without the quotes). The wildcard can be places anywhere in a
 service name, making that element match anything. Note the following two service
@@ -202,7 +202,7 @@ names are equivalent.
 TODO(miek): more examples.
 
 ## Record Types
-You can query SkyDNS for IPv4 addresses, IPv6 addresses and server records, A, AAAA and
+You can query SkyDNS for IPv4 addresses, IPv6 addresses, and server records, A, AAAA and
 SRV records respectively.
 
 Services can be found by querying SkyDNS via any DNS client or utility or via the standard
@@ -223,7 +223,7 @@ Currently you may only retrieve a service's info by UUID of the service, in the
 future we may implement querying of the services similar to the DNS interface.
 
 # Implementation
-The current implementation of SkyDNS ([](#SkyDNS-git), consists out of server and a client
+The current implementation of SkyDNS ([](#SkyDNS-git), consists of server and a client
 library. This client library is also used in a command line tool `skydnsctl` which allows for
 easy registration and querying of SkyDNS.
 
@@ -254,7 +254,7 @@ web1.example.com.  1.0.0      east     web   production
 web2.example.com.  1.0.0      west     web   production
 web3.example.com.  1.0.1      east     web   testing
 
-All running on port 8008 and initially with a TTL of 100 seconds. We used the open source tool
+All running on port 8008 and initially with a TTL of 100 seconds. We use the open source tool
 `uuidgen` for the generation of the UUID.
 
     % skydnsctl add $(uuidgen) \
